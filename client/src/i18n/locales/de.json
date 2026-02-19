@@ -1,0 +1,84 @@
+{
+  "common": {
+    "search": "Suchen",
+    "loading": "Wird geladen...",
+    "error": "Es ist ein Fehler aufgetreten",
+    "retry": "Erneut versuchen",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "viewAll": "Alle anzeigen",
+    "showMore": "Mehr anzeigen",
+    "showLess": "Weniger anzeigen"
+  },
+  "nav": {
+    "home": "Startseite",
+    "explore": "Erkunden",
+    "destinations": "Ziele",
+    "map": "Karte",
+    "favorites": "Favoriten",
+    "profile": "Profil",
+    "login": "Anmelden",
+    "signup": "Anmeldung",
+    "logout": "Abmelden"
+  },
+  "home": {
+    "hero": {
+      "title": "Reisen Sie um die Welt",
+      "titleHighlight": "Ohne Grenzen",
+      "subtitle": "Entdecken Sie atemberaubende Ziele durch immersive virtuelle Touren, 360°-Panoramen und AR-verbesserte Erkundung.",
+      "searchPlaceholder": "Wo möchten Sie erkunden?",
+      "explore": "Erkunden"
+    },
+    "featured": {
+      "title": "Empfohlene Touren",
+      "subtitle": "Handverlesene virtuelle Erlebnisse aus der ganzen Welt"
+    },
+    "popular": {
+      "title": "Beliebt Jetzt",
+      "subtitle": "Sehen Sie, was andere Reisende erkunden"
+    }
+  },
+  "tour": {
+    "virtualTour": "Virtuelle Tour",
+    "panoramic": "360°-Erlebnis",
+    "featured": "Empfohlen",
+    "duration": "Dauer",
+    "participants": "Teilnehmer",
+    "rating": "Bewertung",
+    "reviews": "Bewertungen",
+    "startTour": "Virtuelle Tour starten",
+    "bookNow": "Jetzt buchen",
+    "free": "Kostenlos",
+    "perPerson": "pro Person",
+    "included": "Inbegriffen",
+    "location": "Standort"
+  },
+  "auth": {
+    "welcomeBack": "Willkommen zurück",
+    "signInSubtitle": "Melden Sie sich an, um Ihre virtuellen Abenteuer fortzusetzen",
+    "email": "E-Mail-Adresse",
+    "password": "Passwort",
+    "forgotPassword": "Passwort vergessen?",
+    "signIn": "Anmelden",
+    "noAccount": "Haben Sie noch kein Konto?",
+    "signUpFree": "Kostenlos registrieren",
+    "createAccount": "Konto erstellen",
+    "signUpSubtitle": "Beginnen Sie Ihre virtuelle Reise heute",
+    "name": "Vollständiger Name",
+    "confirmPassword": "Passwort bestätigen",
+    "createAccountBtn": "Konto erstellen",
+    "hasAccount": "Sie haben bereits ein Konto?",
+    "signInLink": "Melden Sie sich an"
+  },
+  "profile": {
+    "title": "Profil",
+    "settings": "Einstellungen",
+    "favorites": "Favoriten",
+    "watchHistory": "Anzeigeverlauf",
+    "editProfile": "Profil bearbeiten",
+    "savedTours": "Gespeicherte Touren",
+    "noSavedTours": "Noch keine Touren gespeichert"
+  }
+}

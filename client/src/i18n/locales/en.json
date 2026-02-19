@@ -1,0 +1,84 @@
+{
+  "common": {
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Try again",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "viewAll": "View all",
+    "showMore": "Show more",
+    "showLess": "Show less"
+  },
+  "nav": {
+    "home": "Home",
+    "explore": "Explore",
+    "destinations": "Destinations",
+    "map": "Map",
+    "favorites": "Favorites",
+    "profile": "Profile",
+    "login": "Log in",
+    "signup": "Sign up",
+    "logout": "Log out"
+  },
+  "home": {
+    "hero": {
+      "title": "Travel the World",
+      "titleHighlight": "Without Limits",
+      "subtitle": "Experience breathtaking destinations through immersive virtual tours, 360° panoramas, and AR-enhanced exploration.",
+      "searchPlaceholder": "Where do you want to explore?",
+      "explore": "Explore"
+    },
+    "featured": {
+      "title": "Featured Tours",
+      "subtitle": "Hand-picked virtual experiences from around the world"
+    },
+    "popular": {
+      "title": "Popular Right Now",
+      "subtitle": "See what other travelers are exploring"
+    }
+  },
+  "tour": {
+    "virtualTour": "Virtual Tour",
+    "panoramic": "360° Experience",
+    "featured": "Featured",
+    "duration": "Duration",
+    "participants": "Participants",
+    "rating": "Rating",
+    "reviews": "reviews",
+    "startTour": "Start Virtual Tour",
+    "bookNow": "Book Now",
+    "free": "Free",
+    "perPerson": "per person",
+    "included": "What's Included",
+    "location": "Location"
+  },
+  "auth": {
+    "welcomeBack": "Welcome back",
+    "signInSubtitle": "Sign in to continue your virtual adventures",
+    "email": "Email Address",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "signIn": "Sign In",
+    "noAccount": "Don't have an account?",
+    "signUpFree": "Sign up for free",
+    "createAccount": "Create an account",
+    "signUpSubtitle": "Start your virtual journey today",
+    "name": "Full Name",
+    "confirmPassword": "Confirm Password",
+    "createAccountBtn": "Create Account",
+    "hasAccount": "Already have an account?",
+    "signInLink": "Sign in"
+  },
+  "profile": {
+    "title": "Profile",
+    "settings": "Settings",
+    "favorites": "Favorites",
+    "watchHistory": "Watch History",
+    "editProfile": "Edit Profile",
+    "savedTours": "Saved Tours",
+    "noSavedTours": "No saved tours yet"
+  }
+}

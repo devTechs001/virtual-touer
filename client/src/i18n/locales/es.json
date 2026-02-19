@@ -1,0 +1,84 @@
+{
+  "common": {
+    "search": "Buscar",
+    "loading": "Cargando...",
+    "error": "Algo salió mal",
+    "retry": "Intentar de nuevo",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "viewAll": "Ver todo",
+    "showMore": "Mostrar más",
+    "showLess": "Mostrar menos"
+  },
+  "nav": {
+    "home": "Inicio",
+    "explore": "Explorar",
+    "destinations": "Destinos",
+    "map": "Mapa",
+    "favorites": "Favoritos",
+    "profile": "Perfil",
+    "login": "Iniciar sesión",
+    "signup": "Registrarse",
+    "logout": "Cerrar sesión"
+  },
+  "home": {
+    "hero": {
+      "title": "Viaja por el Mundo",
+      "titleHighlight": "Sin Límites",
+      "subtitle": "Experimenta destinos impresionantes a través de tours virtuales inmersivos, panoramas 360° y exploración mejorada con AR.",
+      "searchPlaceholder": "¿Dónde quieres explorar?",
+      "explore": "Explorar"
+    },
+    "featured": {
+      "title": "Tours Destacados",
+      "subtitle": "Experiencias virtuales seleccionadas de todo el mundo"
+    },
+    "popular": {
+      "title": "Popular Ahora",
+      "subtitle": "Ve lo que otros viajeros están explorando"
+    }
+  },
+  "tour": {
+    "virtualTour": "Tour Virtual",
+    "panoramic": "Experiencia 360°",
+    "featured": "Destacado",
+    "duration": "Duración",
+    "participants": "Participantes",
+    "rating": "Calificación",
+    "reviews": "reseñas",
+    "startTour": "Iniciar Tour Virtual",
+    "bookNow": "Reservar Ahora",
+    "free": "Gratis",
+    "perPerson": "por persona",
+    "included": "Qué está incluido",
+    "location": "Ubicación"
+  },
+  "auth": {
+    "welcomeBack": "Bienvenido de nuevo",
+    "signInSubtitle": "Inicia sesión para continuar tus aventuras virtuales",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "signIn": "Iniciar Sesión",
+    "noAccount": "¿No tienes cuenta?",
+    "signUpFree": "Regístrate gratis",
+    "createAccount": "Crear cuenta",
+    "signUpSubtitle": "Comienza tu viaje virtual hoy",
+    "name": "Nombre Completo",
+    "confirmPassword": "Confirmar Contraseña",
+    "createAccountBtn": "Crear Cuenta",
+    "hasAccount": "¿Ya tienes cuenta?",
+    "signInLink": "Inicia sesión"
+  },
+  "profile": {
+    "title": "Perfil",
+    "settings": "Configuración",
+    "favorites": "Favoritos",
+    "watchHistory": "Historial de Visualización",
+    "editProfile": "Editar Perfil",
+    "savedTours": "Tours Guardados",
+    "noSavedTours": "Sin tours guardados aún"
+  }
+}

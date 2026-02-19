@@ -1,0 +1,13 @@
+export { default as Home } from './Home';
+export { default as Explore } from './Explore';
+export { default as TourDetails } from './TourDetails';
+export { default as VirtualTour } from './VirtualTour';
+export { default as Destinations } from './Destinations';
+export { default as DestinationDetails } from './DestinationDetails';
+export { default as Map } from './Map';
+export { default as Profile } from './Profile';
+export { default as Bookings } from './Bookings';
+export { default as Favorites } from './Favorites';
+export { default as Login } from './Login';
+export { default as Register } from './Register';
+export { default as NotFound } from './NotFound';

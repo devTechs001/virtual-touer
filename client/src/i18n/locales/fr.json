@@ -1,0 +1,84 @@
+{
+  "common": {
+    "search": "Rechercher",
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "retry": "Réessayer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "viewAll": "Voir tout",
+    "showMore": "Afficher plus",
+    "showLess": "Afficher moins"
+  },
+  "nav": {
+    "home": "Accueil",
+    "explore": "Explorer",
+    "destinations": "Destinations",
+    "map": "Carte",
+    "favorites": "Favoris",
+    "profile": "Profil",
+    "login": "Connexion",
+    "signup": "S'inscrire",
+    "logout": "Déconnexion"
+  },
+  "home": {
+    "hero": {
+      "title": "Voyagez à Travers le Monde",
+      "titleHighlight": "Sans Limites",
+      "subtitle": "Découvrez des destinations magnifiques grâce à des visites virtuelles immersives, des panoramas 360° et l'exploration améliorée par AR.",
+      "searchPlaceholder": "Où voulez-vous explorer ?",
+      "explore": "Explorer"
+    },
+    "featured": {
+      "title": "Visites en Vedette",
+      "subtitle": "Expériences virtuelles sélectionnées de partout dans le monde"
+    },
+    "popular": {
+      "title": "Populaire Maintenant",
+      "subtitle": "Voyez ce que les autres voyageurs explorent"
+    }
+  },
+  "tour": {
+    "virtualTour": "Visite Virtuelle",
+    "panoramic": "Expérience 360°",
+    "featured": "En Vedette",
+    "duration": "Durée",
+    "participants": "Participants",
+    "rating": "Évaluation",
+    "reviews": "avis",
+    "startTour": "Commencer la Visite Virtuelle",
+    "bookNow": "Réserver Maintenant",
+    "free": "Gratuit",
+    "perPerson": "par personne",
+    "included": "Inclus",
+    "location": "Emplacement"
+  },
+  "auth": {
+    "welcomeBack": "Bienvenue",
+    "signInSubtitle": "Connectez-vous pour continuer vos aventures virtuelles",
+    "email": "Adresse E-mail",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "signIn": "Se Connecter",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "signUpFree": "S'inscrire gratuitement",
+    "createAccount": "Créer un compte",
+    "signUpSubtitle": "Commencez votre voyage virtuel aujourd'hui",
+    "name": "Nom Complet",
+    "confirmPassword": "Confirmer le Mot de passe",
+    "createAccountBtn": "Créer un Compte",
+    "hasAccount": "Vous avez déjà un compte ?",
+    "signInLink": "Se connecter"
+  },
+  "profile": {
+    "title": "Profil",
+    "settings": "Paramètres",
+    "favorites": "Favoris",
+    "watchHistory": "Historique de Visionnage",
+    "editProfile": "Modifier le Profil",
+    "savedTours": "Visites Enregistrées",
+    "noSavedTours": "Aucune visite enregistrée pour l'instant"
+  }
+}
