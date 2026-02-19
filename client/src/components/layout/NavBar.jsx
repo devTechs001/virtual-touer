@@ -12,7 +12,8 @@ import {
   LogOut,
   Sun,
   Moon,
-  MapPin
+  MapPin,
+  BarChart3
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -48,7 +49,10 @@ const Navbar = () => {
   const navLinks = [
     { to: '/explore', label: 'Explore' },
     { to: '/destinations', label: 'Destinations' },
-    { to: '/map', label: 'Map' }
+    { to: '/map', label: 'Map' },
+    { to: '/features', label: 'Features' },
+    { to: '/about', label: 'About' },
+    { to: '/contact', label: 'Contact' }
   ];
 
   return (
@@ -142,6 +146,14 @@ const Navbar = () => {
                           <p className="text-sm text-dark-400">{user?.email}</p>
                         </div>
                         <div className="p-2">
+                          <Link
+                            to="/dashboard"
+                            onClick={() => setIsProfileOpen(false)}
+                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-dark-300 hover:text-dark-100 hover:bg-dark-700/50 transition-all"
+                          >
+                            <BarChart3 className="w-4 h-4" />
+                            Dashboard
+                          </Link>
                           <Link
                             to="/profile"
                             onClick={() => setIsProfileOpen(false)}

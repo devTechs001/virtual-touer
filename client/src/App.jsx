@@ -20,6 +20,10 @@ const Bookings = lazy(() => import('./pages/Bookings'));
 const Favorites = lazy(() => import('./pages/Favorites'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
+const About = lazy(() => import('./pages/About'));
+const Features = lazy(() => import('./pages/Features'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 function App() {
@@ -36,11 +40,15 @@ function App() {
             <Route path="destinations" element={<Destinations />} />
             <Route path="destination/:id" element={<DestinationDetails />} />
             <Route path="map" element={<Map />} />
+            <Route path="about" element={<About />} />
+            <Route path="features" element={<Features />} />
+            <Route path="contact" element={<Contact />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
 
             {/* Protected Routes */}
             <Route element={<ProtectedRoute />}>
+              <Route path="dashboard" element={<Dashboard />} />
               <Route path="profile" element={<Profile />} />
               <Route path="bookings" element={<Bookings />} />
               <Route path="favorites" element={<Favorites />} />

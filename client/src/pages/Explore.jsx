@@ -16,8 +16,8 @@ import { useInView } from 'react-intersection-observer';
 
 import TourGrid from '../components/tours/TourGrid';
 import TourListView from '../components/tours/TourListView';
-import FilterSidebar from '../components/filters/FilterSidebar';
-import FilterChips from '../components/filters/FilterChips';
+import FilterChips from '../components/filter/FilterChips';
+import FilterSidebar from '../components/filter/FilterSidebar';
 import InteractiveMap from '../components/maps/InteractiveMap';
 import { useTours } from '../hooks/useTours';
 import { useDebounce } from '../hooks/useDebounce';

@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import Navbar from './Navbar';
+import NavBar from './NavBar';
 import Footer from './Footer';
 import MobileNav from './MobileNav';
 import InstallPrompt from '../common/InstallPrompt';
@@ -11,7 +11,7 @@ const MainLayout = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {!isVirtualTour && <Navbar />}
+      {!isVirtualTour && <NavBar />}
       
       <main className="flex-1">
         <AnimatePresence mode="wait">

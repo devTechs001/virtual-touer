@@ -1,4 +1,4 @@
-import Favorite from '../models/Favorite.model.js';
+import Favourite from '../models/Favourite.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import ApiError from '../utils/ApiError.js';
 

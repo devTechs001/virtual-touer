@@ -5,8 +5,8 @@ import { Search, MapPin, Globe2, Star, ArrowRight, Filter } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 
 import { destinationService } from '../services/api';
-import DestinationCard from '../components/destinations/DestinationCard';
-import WorldMap from '../components/maps/WorldMap';
+import DestinationCard from '../components/destination/DestinationCard';
+import InteractiveMap from '../components/maps/InteractiveMap';
 
 const continents = [
   { id: 'all', label: 'All', icon: '🌍' },

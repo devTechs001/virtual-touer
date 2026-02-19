@@ -11,7 +11,7 @@ import {
   Users 
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { useToggleFavorite, useCheckFavorite } from '../../hooks/useFavorites';
+import { useToggleFavorite, useCheckFavorite } from '../../hooks/useFavourites';
 
 const TourCard = ({ tour, index = 0 }) => {
   const [isHovered, setIsHovered] = useState(false);

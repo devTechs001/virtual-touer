@@ -22,7 +22,7 @@ import {
 import toast from 'react-hot-toast';
 
 import { useAuth } from '../context/AuthContext';
-import { useFavorites } from '../hooks/useFavorites';
+import { useFavorites } from '../hooks/useFavourites';
 import TourCard from '../components/tours/TourCard';
 
 const profileSchema = z.object({

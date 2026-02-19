@@ -1,5 +1,5 @@
-import Destination from '../models/Destination.model.js';
-import Tour from '../models/Tour.model.js';
+import Destination from '../models/Destination.js';
+import Tour from '../models/Tour.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import ApiError from '../utils/ApiError.js';
 

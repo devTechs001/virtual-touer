@@ -41,6 +41,9 @@ importers:
       mapbox-gl:
         specifier: ^3.0.1
         version: 3.18.1
+      pannellum:
+        specifier: ^2.5.7
+        version: 2.5.7
       pannellum-react:
         specifier: ^1.2.2
         version: 1.2.4(react@18.3.1)
@@ -2445,6 +2448,9 @@ packages:
     resolution: {integrity: sha512-Jk4tQFFE6lAy+JmNCu6pmTh9+th2XjqYGT/sOt17m/GYcN/Uu2Y1TVS2p8ndpCEyY8ZskGXvsmV6Apb3YdVi7Q==}
     peerDependencies:
       react: 16.x
+
+  pannellum@2.5.7:
+    resolution: {integrity: sha512-AHMRYdLPxetwhBg4lO5EgoZ55C/e+wrJF2WaFQIQA18HSVcvLvsdXEjDL7WpD8MPIFwNnH9qoUDsUqP8cF4pgA==}
 
   parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
@@ -5941,6 +5947,8 @@ snapshots:
     dependencies:
       react: 18.3.1
       video.js: 7.21.7
+
+  pannellum@2.5.7: {}
 
   parent-module@1.0.1:
     dependencies:
