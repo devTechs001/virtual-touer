@@ -1,15 +1,18 @@
 import { NavLink } from 'react-router-dom';
-import { Home, Compass, Map, Heart, User } from 'lucide-react';
+import { Home, Compass, Map, Heart, User, Settings } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const MobileNav = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+
+  const isAdmin = user?.role === 'admin';
 
   const navItems = [
     { to: '/', icon: Home, label: 'Home' },
     { to: '/explore', icon: Compass, label: 'Explore' },
     { to: '/map', icon: Map, label: 'Map' },
     { to: '/favorites', icon: Heart, label: 'Saved', protected: true },
+    ...(isAdmin ? [{ to: '/admin', icon: Settings, label: 'Admin', protected: true }] : []),
     { to: isAuthenticated ? '/profile' : '/login', icon: User, label: 'Profile' }
   ];
 

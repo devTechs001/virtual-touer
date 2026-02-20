@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../services/api';
@@ -18,13 +18,12 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
+  const isInitialized = useRef(false);
 
-  // Check authentication status on mount
-  useEffect(() => {
-    checkAuth();
-  }, []);
+  const checkAuth = useCallback(async () => {
+    if (isInitialized.current) return;
+    isInitialized.current = true;
 
-  const checkAuth = async () => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
@@ -38,22 +37,33 @@ export const AuthProvider = ({ children }) => {
       }
     }
     setLoading(false);
-  };
+  }, []);
+
+  // Check authentication status on mount
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   const login = useCallback(async (email, password) => {
     try {
       const response = await api.post('/auth/login', { email, password });
       const { token, user } = response.data;
-      
+
       localStorage.setItem('token', token);
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      
+
       setUser(user);
       setIsAuthenticated(true);
-      
+
       toast.success(`Welcome back, ${user.name}!`);
-      navigate('/');
-      
+
+      // Redirect admin users to admin dashboard
+      if (user.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
+
       return { success: true };
     } catch (error) {
       const message = error.response?.data?.message || 'Login failed';

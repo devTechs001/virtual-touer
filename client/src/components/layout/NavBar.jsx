@@ -1,22 +1,26 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Globe, 
-  Search, 
-  Menu, 
-  X, 
-  User, 
-  Heart, 
-  Calendar, 
+import {
+  Globe,
+  Search,
+  Menu,
+  X,
+  User,
+  Heart,
+  Calendar,
   LogOut,
   Sun,
   Moon,
   MapPin,
-  BarChart3
+  BarChart3,
+  Settings,
+  PlusCircle,
+  Bell
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import NotificationCenter from '../notification/NotificationCenter';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -24,7 +28,7 @@ const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   const { user, isAuthenticated, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
@@ -54,6 +58,8 @@ const Navbar = () => {
     { to: '/about', label: 'About' },
     { to: '/contact', label: 'Contact' }
   ];
+
+  const isAdmin = user?.role === 'admin';
 
   return (
     <header
@@ -104,6 +110,9 @@ const Navbar = () => {
               <Search className="w-5 h-5" />
             </button>
 
+            {/* Notification Bell */}
+            {isAuthenticated && <NotificationCenter />}
+
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
@@ -146,6 +155,30 @@ const Navbar = () => {
                           <p className="text-sm text-dark-400">{user?.email}</p>
                         </div>
                         <div className="p-2">
+                          {isAdmin && (
+                            <>
+                              <div className="px-3 py-2 mb-2 text-xs font-semibold text-primary-400 uppercase tracking-wider">
+                                Admin
+                              </div>
+                              <Link
+                                to="/admin"
+                                onClick={() => setIsProfileOpen(false)}
+                                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-dark-300 hover:text-dark-100 hover:bg-dark-700/50 transition-all"
+                              >
+                                <Settings className="w-4 h-4" />
+                                Admin Dashboard
+                              </Link>
+                              <Link
+                                to="/admin/tours/create"
+                                onClick={() => setIsProfileOpen(false)}
+                                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-dark-300 hover:text-dark-100 hover:bg-dark-700/50 transition-all"
+                              >
+                                <PlusCircle className="w-4 h-4" />
+                                Create Tour
+                              </Link>
+                              <div className="my-2 border-t border-dark-700" />
+                            </>
+                          )}
                           <Link
                             to="/dashboard"
                             onClick={() => setIsProfileOpen(false)}

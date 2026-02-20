@@ -8,7 +8,7 @@ import {
   createDestination,
   updateDestination,
   deleteDestination
-} from '../controllers/destination.controller.js';
+} from '../controllers/destinationControllers.js';
 import { protect, authorize } from '../middleware/auth.js';
 
 const router = express.Router();

@@ -27,8 +27,13 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      window.location.href = '/login';
+      const currentPath = window.location.pathname;
+      // Only redirect if not already on login page
+      if (currentPath !== '/login') {
+        localStorage.removeItem('token');
+        delete api.defaults.headers.common['Authorization'];
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
@@ -78,4 +83,98 @@ export const favoriteService = {
   add: (tourId) => api.post('/favorites', { tourId }),
   remove: (tourId) => api.delete(`/favorites/${tourId}`),
   check: (tourId) => api.get(`/favorites/check/${tourId}`)
+};
+
+export const notificationService = {
+  getAll: () => api.get('/notifications'),
+  markAsRead: (id) => api.put(`/notifications/${id}/read`),
+  markAllAsRead: () => api.put('/notifications/read-all'),
+  delete: (id) => api.delete(`/notifications/${id}`)
+};
+
+export const socialService = {
+  followUser: (userId) => api.post(`/users/${userId}/follow`),
+  unfollowUser: (userId) => api.delete(`/users/${userId}/follow`),
+  checkFollowing: (userId) => api.get(`/users/${userId}/follow/check`),
+  getFollowers: (userId) => api.get(`/users/${userId}/followers`),
+  getFollowing: (userId) => api.get(`/users/${userId}/following`),
+  getFeed: () => api.get('/social/feed'),
+  shareTour: (tourId, data) => api.post(`/tours/${tourId}/share`, data),
+  getComments: (tourId) => api.get(`/tours/${tourId}/comments`),
+  addComment: (tourId, data) => api.post(`/tours/${tourId}/comments`, data),
+  deleteComment: (tourId, commentId) => api.delete(`/tours/${tourId}/comments/${commentId}`)
+};
+
+export const uploadService = {
+  uploadImage: (formData) => api.post('/upload/image', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
+  uploadImages: (formData) => api.post('/upload/images', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
+  uploadPanorama: (formData) => api.post('/upload/panorama', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
+  deleteFile: (fileId) => api.delete(`/upload/${fileId}`)
+};
+
+export const userService = {
+  getById: (id) => api.get(`/users/${id}`),
+  update: (id, data) => api.put(`/users/${id}`, data),
+  getBookings: (userId) => api.get(`/users/${userId}/bookings`),
+  getFavorites: (userId) => api.get(`/users/${userId}/favorites`),
+  getReviews: (userId) => api.get(`/users/${userId}/reviews`),
+  getStats: (userId) => api.get(`/users/${userId}/stats`),
+  getDashboard: () => api.get('/users/dashboard'),
+  getAchievements: () => api.get('/users/achievements'),
+  getRecommendations: () => api.get('/users/recommendations'),
+  getContinueWatching: () => api.get('/users/continue-watching'),
+  getRecentActivity: () => api.get('/users/activity')
+};
+
+export const paymentService = {
+  createPaymentIntent: (bookingId) => api.post(`/payments/${bookingId}/payment-intent`),
+  confirmPayment: (paymentMethodId, data) => api.post('/payments/confirm', { paymentMethodId, ...data }),
+  getPaymentStatus: (paymentId) => api.get(`/payments/${paymentId}/status`),
+  refund: (paymentId) => api.post(`/payments/${paymentId}/refund`)
+};
+
+// System & Maintenance Service
+export const systemService = {
+  getMaintenanceStatus: () => api.get('/system/maintenance/status'),
+  getAnnouncements: () => api.get('/announcements'),
+  subscribeMaintenanceNotification: (email) =>
+    api.post('/system/maintenance/subscribe', { email }),
+  getFeatures: () => api.get('/system/features')
+};
+
+// Extended admin service with system management
+export const adminService = {
+  getStats: () => api.get('/admin/stats'),
+  getRecentActivity: () => api.get('/admin/activity'),
+  getAllUsers: (params) => api.get('/admin/users', { params }),
+  getUser: (id) => api.get(`/admin/users/${id}`),
+  updateUser: (id, data) => api.put(`/admin/users/${id}`, data),
+  deleteUser: (id) => api.delete(`/admin/users/${id}`),
+  getAllTours: (params) => api.get('/admin/tours', { params }),
+  getTour: (id) => api.get(`/admin/tours/${id}`),
+  createTour: (data) => api.post('/admin/tours', data),
+  updateTour: (id, data) => api.put(`/admin/tours/${id}`, data),
+  deleteTour: (id) => api.delete(`/admin/tours/${id}`),
+  getBookings: (params) => api.get('/admin/bookings', { params }),
+  updateBooking: (id, data) => api.put(`/admin/bookings/${id}`, data),
+  deleteBooking: (id) => api.delete(`/admin/bookings/${id}`),
+  getReviews: (params) => api.get('/admin/reviews', { params }),
+  deleteReview: (id) => api.delete(`/admin/reviews/${id}`),
+
+  // System management
+  getSystemConfig: () => api.get('/system/config'),
+  updateSystemConfig: (key, value) => api.put(`/system/config/${key}`, { value }),
+  toggleMaintenance: (data) => api.post('/system/maintenance/toggle', data),
+  scheduleMaintenance: (data) => api.post('/system/maintenance/schedule', data),
+  cancelScheduledMaintenance: () => api.delete('/system/maintenance/schedule'),
+  toggleFeature: (feature, enabled) => api.put(`/system/features/${feature}`, { enabled }),
+  createAnnouncement: (data) => api.post('/system/announcements', data),
+  deleteAnnouncement: (id) => api.delete(`/system/announcements/${id}`),
+  getSystemHealth: () => api.get('/system/health')
 };

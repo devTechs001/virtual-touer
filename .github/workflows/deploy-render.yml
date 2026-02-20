@@ -1,0 +1,24 @@
+# Backend Deployment to Render
+# https://render.com/docs/blueprint-spec
+
+name: Deploy Backend to Render
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'server/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Trigger Render Deploy
+        run: |
+          curl -X POST "https://api.render.com/deploy/srv-xxx" \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}"

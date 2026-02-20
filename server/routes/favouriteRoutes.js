@@ -4,7 +4,7 @@ import {
   addFavorite,
   removeFavorite,
   checkFavorite
-} from '../controllers/favorite.controller.js';
+} from '../controllers/favouriteController.js';
 import { protect } from '../middleware/auth.js';
 
 const router = express.Router();

@@ -1,9 +1,213 @@
-# Dependencies
+# ============================================
+# DEPENDENCIES
+# ============================================
 node_modules/
+.pnpm-store/
 
-# Environment
+# ============================================
+# ENVIRONMENT VARIABLES & SECRETS
+# ============================================
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+*.env
+.env~
 
-# Logs
+# API Keys & Secrets (Server-specific)
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+secrets/
+secret/
+.private
+credentials/
+credentials.json
+service-account*.json
+*-service-account.json
+firebase-adminsdk*.json
+stripe-keys.json
+aws-credentials
+.aws/credentials
+
+# ============================================
+# BUILD OUTPUT
+# ============================================
+dist/
+build/
+*.local
+.tsbuildinfo
+
+# ============================================
+# EDITOR
+# ============================================
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.sln
+*.sw?
+*~
+
+# ============================================
+# LOGS
+# ============================================
 logs/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+error.log
+access.log
+
+# ============================================
+# TESTING
+# ============================================
+coverage/
+.nyc_output/
+*.lcov
+.jest/
+test-results/
+
+# ============================================
+# DATABASE
+# ============================================
+*.sqlite
+*.sqlite3
+*.db
+data/
+*.mongod.lock
+*.pid
+
+# ============================================
+# UPLOADS & TEMP FILES
+# ============================================
+uploads/
+public/uploads/
+tmp/
+temp/
+*.tmp
+*.temp
+
+# ============================================
+# OS
+# ============================================
+.DS_Store
+Thumbs.db
+._*
+
+# ============================================
+# DOCUMENTATION WITH SECRETS
+# ============================================
+**/secrets.md
+**/secret*.md
+**/credentials.md
+**/passwords.md
+**/api-keys.md
+**/private-keys.md
+**/*.secret.md
+**/*.credentials.md
+**/*.passwords.md
+*.bak
+*.backup
+*.old
+*.orig
+
+# ============================================
+# BUILD ARTIFACTS
+# ============================================
+# Build output
+dist/
+build/
+out/
+
+# Compiled files
+*.class
+*.o
+*.so
+*.dll
+
+# Build logs
+build.log
+npm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# ============================================
+# PACKAGE MANAGER
+# ============================================
+node_modules/
+pnpm-lock.yaml
+
+# ============================================
+# IDE
+# ============================================
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea
+*.suo
+*.ntvs*
+*.sln
+*.sw?
+*~
+
+# ============================================
+# LOGS
+# ============================================
+logs/
+*.log
+error.log
+access.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ============================================
+# DATABASE
+# ============================================
+*.sqlite
+*.sqlite3
+*.db
+data/
+*.mongod.lock
+*.pid
+
+# ============================================
+# UPLOADS & TEMP FILES
+# ============================================
+uploads/
+public/uploads/
+tmp/
+temp/
+*.tmp
+*.temp
+
+# ============================================
+# DOCKER
+# ============================================
+.docker/
+docker-compose.override.yml
+
+# ============================================
+# ENVIRONMENT
+# ============================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+*.env
+.env~
+

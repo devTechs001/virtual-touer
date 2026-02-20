@@ -1,0 +1,54 @@
+# Netlify Configuration
+# https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+  base = "client/"
+  publish = "dist/"
+  command = "pnpm build"
+
+[build.environment]
+  NODE_VERSION = "20"
+  PNPM_VERSION = "8"
+
+# Redirects for SPA
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# API Proxying (development)
+[[redirects]]
+  from = "/api/*"
+  to = "https://your-render-app.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+# Headers for security and caching
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Cache static assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# PWA offline support
+[[redirects]]
+  from = "/sw.js"
+  to = "/sw.js"
+  status = 200
+  force = true
+
+# Production context
+[context.production]
+  environment = { VITE_API_URL = "https://your-render-app.onrender.com/api" }
+
+# Deploy previews
+[context.deploy-preview]
+  command = "pnpm build"

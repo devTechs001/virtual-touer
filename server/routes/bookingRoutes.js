@@ -7,7 +7,7 @@ import {
   getPaymentIntent,
   confirmPayment,
   webhookHandler
-} from '../controllers/booking.controller.js';
+} from '../controllers/bookingController.js';
 import { protect } from '../middleware/auth.js';
 
 const router = express.Router();

@@ -10,9 +10,9 @@ import {
   resetPassword,
   verifyEmail,
   resendVerification
-} from '../controllers/auth.controller.js';
+} from '../controllers/authController.js';
 import { protect } from '../middleware/auth.js';
-import { validateRegister, validateLogin } from '../middleware/validators.js';
+import { validateRegister, validateLogin } from '../middleware/validatiors.js';
 
 const router = express.Router();
 

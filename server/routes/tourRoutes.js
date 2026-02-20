@@ -10,9 +10,9 @@ import {
   updateTour,
   deleteTour,
   addReview
-} from '../controllers/tour.controller.js';
+} from '../controllers/tourController.js';
 import { protect, authorize } from '../middleware/auth.js';
-import { validateTour, validateReview } from '../middleware/validators.js';
+import { validateTour, validateReview } from '../middleware/validatiors.js';
 
 const router = express.Router();
 

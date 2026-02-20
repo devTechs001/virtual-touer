@@ -3,27 +3,43 @@ import { io } from 'socket.io-client';
 
 const SOCKET_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
 
+let socket = null;
+
 export const useSocket = () => {
   const socketRef = useRef(null);
 
   useEffect(() => {
-    socketRef.current = io(SOCKET_URL, {
-      transports: ['websocket'],
-      autoConnect: true
-    });
+    if (!socket) {
+      socket = io(SOCKET_URL, {
+        transports: ['websocket', 'polling'],
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionAttempts: 5
+      });
 
-    socketRef.current.on('connect', () => {
-      console.log('Socket connected:', socketRef.current.id);
-    });
+      socket.on('connect', () => {
+        console.log('Socket connected:', socket.id);
+      });
 
-    socketRef.current.on('disconnect', () => {
-      console.log('Socket disconnected');
-    });
+      socket.on('disconnect', () => {
+        console.log('Socket disconnected');
+      });
+
+      socket.on('connect_error', (error) => {
+        console.error('Socket connection error:', error);
+      });
+    }
+
+    socketRef.current = socket;
 
     return () => {
-      socketRef.current?.disconnect();
+      // Don't disconnect on unmount, keep the singleton alive
     };
   }, []);
 
   return socketRef.current;
 };
+
+export const getSocket = () => socket;
+
+export default useSocket;

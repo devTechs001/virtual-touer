@@ -1,5 +1,4 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -9,20 +8,27 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import dotenv from 'dotenv';
 
+// Database import
+import connectDB from './config/db.js';
+
 // Route imports
-import authRoutes from './routes/auth.routes.js';
-import tourRoutes from './routes/tour.routes.js';
-import destinationRoutes from './routes/destination.routes.js';
-import bookingRoutes from './routes/booking.routes.js';
-import favoriteRoutes from './routes/favorite.routes.js';
-import reviewRoutes from './routes/review.routes.js';
-import uploadRoutes from './routes/upload.routes.js';
+import authRoutes from './routes/authRoutes.js';
+import tourRoutes from './routes/tourRoutes.js';
+import destinationRoutes from './routes/destinationRoutes.js';
+import bookingRoutes from './routes/bookingRoutes.js';
+import favoriteRoutes from './routes/favouriteRoutes.js';
+import reviewRoutes from './routes/reviewRoutes.js';
+import uploadRoutes from './routes/uploadRoutes.js';
 
 // Middleware imports
-import errorHandler from './middleware/errorHandler.js';
-import notFound from './middleware/notFound.js';
+import { errorHandler } from './middleware/error.js';
+import { notFound } from './middleware/notFound.js';
+import auditLogger from './middleware/auditLogger.js';
+import adminRoutes from './routes/adminRoutes.js';
 
 dotenv.config();
+
+// (connectDB will be called after httpServer is created further down)
 
 const app = express();
 const httpServer = createServer(app);
@@ -52,6 +58,9 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use('/api', limiter);
 
+// Audit logger (non-blocking) - logs important requests
+app.use(auditLogger);
+
 // Make io accessible in routes
 app.set('io', io);
 
@@ -63,6 +72,8 @@ app.use('/api/bookings', bookingRoutes);
 app.use('/api/favorites', favoriteRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/upload', uploadRoutes);
+// Admin endpoints for backups, api-keys, webhooks, audit logs, seeding
+app.use('/api/admin', adminRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -90,24 +101,16 @@ io.on('connection', (socket) => {
     console.log('User disconnected:', socket.id);
   });
 });
-
-// Database connection
-const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('✅ MongoDB connected successfully');
-  } catch (error) {
-    console.error('❌ MongoDB connection error:', error.message);
-    process.exit(1);
-  }
-};
-
 const PORT = process.env.PORT || 5000;
 
+// Connect to DB (uses imported connectDB from ./config/db.js) and then start server
 connectDB().then(() => {
   httpServer.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
   });
+}).catch((err) => {
+  console.error('Failed to connect to DB before starting server:', err);
+  process.exit(1);
 });
 
 export default app;

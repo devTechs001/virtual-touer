@@ -4,9 +4,8 @@ import {
   getReview,
   updateReview,
   deleteReview,
-  markHelpful,
-  reportReview
-} from '../controllers/review.controller.js';
+  markHelpful
+} from '../controllers/reviewController.js';
 import { protect, authorize } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -19,6 +18,5 @@ router.use(protect);
 router.put('/:id', updateReview);
 router.delete('/:id', deleteReview);
 router.post('/:id/helpful', markHelpful);
-router.post('/:id/report', reportReview);
 
 export default router;

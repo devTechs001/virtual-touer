@@ -1,0 +1,50 @@
+# Render Configuration
+# https://render.com/docs/blueprint-spec
+
+services:
+  # Frontend Service (Static Site)
+  - type: web
+    name: virtual-tourist-frontend
+    env: static
+    buildCommand: cd client && pnpm install && pnpm build
+    staticPublishPath: ./client/dist
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: VITE_API_URL
+        sync: false
+      - key: VITE_APP_NAME
+        sync: false
+
+  # Backend Service (Node.js)
+  - type: web
+    name: virtual-tourist-backend
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: cd server && pnpm install
+    startCommand: cd server && pnpm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: PORT
+        value: 5000
+      - key: NODE_ENV
+        value: production
+
+  # Database (MongoDB Atlas - Primary)
+  # Note: Create MongoDB Atlas cluster separately
+  # Connection string will be in MONGODB_URI env var
+
+  # Cron Job for database seeding
+  - type: cron
+    name: virtual-tourist-seed
+    env: node
+    buildCommand: cd server && pnpm install
+    startCommand: cd server && pnpm run seed:all
+    schedule: "0 0 * * 0"  # Weekly on Sunday at midnight
