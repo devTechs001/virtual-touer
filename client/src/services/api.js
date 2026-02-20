@@ -8,9 +8,22 @@ const api = axios.create({
   }
 });
 
-// Request interceptor
+// Simple in-memory cache
+const cache = new Map();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+// Request interceptor with caching
 api.interceptors.request.use(
   (config) => {
+    // Only cache GET requests
+    if (config.method === 'get') {
+      const cached = cache.get(config.url);
+      if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+        // Return cached data if still valid
+        return Promise.reject({ __cached: true, data: cached.data });
+      }
+    }
+
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -24,8 +37,22 @@ api.interceptors.request.use(
 
 // Response interceptor
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Cache GET responses
+    if (response.config.method === 'get') {
+      cache.set(response.config.url, {
+        data: response.data,
+        timestamp: Date.now()
+      });
+    }
+    return response;
+  },
   (error) => {
+    // Handle cached responses
+    if (error.__cached) {
+      return Promise.resolve({ data: error.data, fromCache: true });
+    }
+
     if (error.response?.status === 401) {
       const currentPath = window.location.pathname;
       // Only redirect if not already on login page
@@ -35,6 +62,15 @@ api.interceptors.response.use(
         window.location.href = '/login';
       }
     }
+
+    // Handle rate limiting
+    if (error.response?.status === 429) {
+      console.warn('Rate limit exceeded. Consider slowing down requests.');
+      const retryAfter = error.response.headers['retry-after'] ||
+                        error.response.data?.retryAfter || 60;
+      console.warn(`Retry after: ${retryAfter} seconds`);
+    }
+
     return Promise.reject(error);
   }
 );

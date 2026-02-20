@@ -39,11 +39,36 @@ const io = new Server(httpServer, {
   }
 });
 
-// Rate limiting
+// Rate limiting - More lenient for development
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
-  message: { message: 'Too many requests, please try again later.' }
+  max: process.env.NODE_ENV === 'development' ? 1000 : 100, // More requests in dev
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  message: {
+    message: 'Too many requests, please try again later.',
+    retryAfter: Math.ceil((15 * 60 * 1000) / 1000) // seconds
+  },
+  skip: (req) => {
+    // Skip rate limiting for health checks
+    if (req.path === '/health') return true;
+    // Skip for localhost in development
+    if (process.env.NODE_ENV === 'development' && req.ip === '127.0.0.1') return true;
+    return false;
+  }
+});
+
+// API-specific rate limits
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: process.env.NODE_ENV === 'development' ? 500 : 50,
+  message: { message: 'Too many API requests, please slow down.' }
+});
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20, // Strict limit for auth
+  message: { message: 'Too many authentication attempts.' }
 });
 
 // Middleware
@@ -57,6 +82,13 @@ app.use(morgan('dev'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use('/api', limiter);
+
+// Apply stricter limits to auth endpoints
+app.use('/api/auth', authLimiter);
+
+// Apply API limiter to data endpoints
+app.use('/api/tours', apiLimiter);
+app.use('/api/destinations', apiLimiter);
 
 // Audit logger (non-blocking) - logs important requests
 app.use(auditLogger);
@@ -75,9 +107,14 @@ app.use('/api/upload', uploadRoutes);
 // Admin endpoints for backups, api-keys, webhooks, audit logs, seeding
 app.use('/api/admin', adminRoutes);
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+// Health check (skip rate limiting)
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
 });
 
 // Error handling
