@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+// In test environment, use relative URL
+const isTestEnv = typeof process !== 'undefined' && process.env.VITE_API_URL === '/api';
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: isTestEnv ? '/api' : (import.meta.env.VITE_API_URL || '/api'),
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json'
@@ -178,7 +181,7 @@ export const paymentService = {
 // System & Maintenance Service
 export const systemService = {
   getMaintenanceStatus: () => api.get('/system/maintenance/status'),
-  getAnnouncements: () => api.get('/announcements'),
+  getAnnouncements: () => api.get('/system/announcements'),
   subscribeMaintenanceNotification: (email) =>
     api.post('/system/maintenance/subscribe', { email }),
   getFeatures: () => api.get('/system/features')

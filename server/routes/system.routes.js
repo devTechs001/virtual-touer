@@ -21,6 +21,7 @@ const router = express.Router();
 router.get('/maintenance/status', getMaintenanceStatus);
 router.get('/announcements', getActiveAnnouncements);
 router.get('/health', getSystemHealth);
+router.get('/features', getFeatureFlags);
 
 // Protected routes (admin only)
 router.use(protect);
@@ -33,7 +34,6 @@ router.post('/maintenance/toggle', toggleMaintenance);
 router.post('/maintenance/schedule', scheduleMaintenance);
 router.delete('/maintenance/schedule', cancelScheduledMaintenance);
 
-router.get('/features', getFeatureFlags);
 router.put('/features/:feature', toggleFeature);
 
 router.post('/announcements', createAnnouncement);

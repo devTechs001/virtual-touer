@@ -1,54 +1,183 @@
-# Netlify Configuration
-# https://docs.netlify.com/configure-builds/file-based-configuration/
+# ============================================
+# Netlify Configuration - Virtual Tourist (2026)
+# ============================================
+# Documentation: https://docs.netlify.com/configure-builds/file-based-configuration/
+# ============================================
 
 [build]
-  base = "client/"
-  publish = "dist/"
-  command = "pnpm build"
+  # Directory to publish (after build)
+  publish = "client/dist"
+  
+  # Build command
+  command = "cd client && npm run build"
 
 [build.environment]
   NODE_VERSION = "20"
-  PNPM_VERSION = "8"
+  NPM_VERSION = "10"
+  NPM_FLAGS = "--prefix=client"
 
-# Redirects for SPA
+# ============================================
+# REDIRECTS
+# ============================================
+
+# Redirect API requests to Render backend
+[[redirects]]
+  from = "/api/*"
+  to = "https://virtual-tourist-api.onrender.com/api/:splat"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
+
+# Redirect GraphQL requests (if needed)
+[[redirects]]
+  from = "/graphql"
+  to = "https://virtual-tourist-api.onrender.com/graphql"
+  status = 200
+  force = true
+
+# SPA fallback - all other requests go to index.html
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-# API Proxying (development)
-[[redirects]]
-  from = "/api/*"
-  to = "https://your-render-app.onrender.com/api/:splat"
-  status = 200
-  force = true
+# ============================================
+# SECURITY HEADERS
+# ============================================
 
-# Headers for security and caching
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://virtual-tourist-api.onrender.com https://api.mapbox.com wss://*.onrender.com;"
 
 # Cache static assets
 [[headers]]
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    X-Robots-Tag = "noindex"
 
-# PWA offline support
-[[redirects]]
-  from = "/sw.js"
-  to = "/sw.js"
-  status = 200
-  force = true
+# PWA files
+[[headers]]
+  for = "/manifest.json"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+    Content-Type = "application/manifest+json"
 
-# Production context
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    Content-Type = "application/javascript"
+
+# ============================================
+# PLUGINS
+# ============================================
+
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+  
+  [plugins.inputs]
+    output_path = "reports/lighthouse.html"
+
+[[plugins]]
+  package = "netlify-plugin-submit-sitemap"
+  
+  [plugins.inputs]
+    baseUrl = "https://virtual-tourist.netlify.app"
+    sitemapPath = "/sitemap.xml"
+    providers = ["google", "bing"]
+
+# ============================================
+# CONTEXT-SPECIFIC SETTINGS
+# ============================================
+
+# Production
 [context.production]
-  environment = { VITE_API_URL = "https://your-render-app.onrender.com/api" }
+  environment = { VITE_API_URL = "https://virtual-tourist-api.onrender.com/api", VITE_APP_URL = "https://virtual-tourist.netlify.app", VITE_ENABLE_ANALYTICS = "true", VITE_ENABLE_PWA = "true" }
+  publish = "client/dist"
+  command = "cd client && npm run build"
 
-# Deploy previews
+# Deploy Previews
 [context.deploy-preview]
-  command = "pnpm build"
+  environment = { VITE_API_URL = "https://virtual-tourist-api.onrender.com/api", VITE_APP_URL = "DEPLOY_URL", VITE_ENABLE_ANALYTICS = "false" }
+  publish = "client/dist"
+  command = "cd client && npm run build"
+
+# Branch Deploys
+[context.branch-deploy]
+  environment = { VITE_API_URL = "https://virtual-tourist-api.onrender.com/api", VITE_ENABLE_ANALYTICS = "false" }
+  publish = "client/dist"
+  command = "cd client && npm run build"
+
+# Development (main branch)
+[context.main]
+  environment = { VITE_API_URL = "https://virtual-tourist-api.onrender.com/api", VITE_APP_URL = "https://virtual-tourist.netlify.app" }
+
+# ============================================
+# FUNCTIONS (Serverless)
+# ============================================
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+  included_files = ["client/src/data/**"]
+
+# Example function for API fallback
+# [[redirects]]
+#   from = "/api/*"
+#   to = "/.netlify/functions/api-handler/:splat"
+#   status = 200
+
+# ============================================
+# PROCESSING
+# ============================================
+
+[build.processing]
+  skip_processing = false
+  
+[build.processing.css]
+  bundle = true
+  minify = true
+  
+[build.processing.js]
+  bundle = true
+  minify = true
+  
+[build.processing.html]
+  pretty_urls = true
+  
+[build.processing.images]
+  compress = true
+
+# ============================================
+# SNIPPETS
+# ============================================
+
+[build.processing.html.head]
+  snippet = """
+    <!-- Analytics -->
+    <script defer src="https://analytics.example.com/script.js"></script>
+  """
+
+# ============================================
+# UTILITY
+# ============================================
+
+# Dev server
+[dev]
+  command = "cd client && npm run dev"
+  port = 5173
+  publish = "client/dist"
+  autoLaunch = false
+  framework = "vite"
+
+# ============================================
+# END OF CONFIGURATION
+# ============================================

@@ -19,6 +19,8 @@ import bookingRoutes from './routes/bookingRoutes.js';
 import favoriteRoutes from './routes/favouriteRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
+import systemRoutes from './routes/system.routes.js';
+import logsRoutes from './routes/logs.routes.js';
 
 // Middleware imports
 import { errorHandler } from './middleware/error.js';
@@ -104,6 +106,8 @@ app.use('/api/bookings', bookingRoutes);
 app.use('/api/favorites', favoriteRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/system', systemRoutes);
+app.use('/api/logs', logsRoutes);
 // Admin endpoints for backups, api-keys, webhooks, audit logs, seeding
 app.use('/api/admin', adminRoutes);
 
@@ -114,7 +118,6 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime()
   });
-});
 });
 
 // Error handling

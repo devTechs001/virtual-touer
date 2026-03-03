@@ -1,9 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, waitFor, act } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuth } from '../../context/AuthContext';
 import { AuthProvider } from '../../context/AuthContext';
-import { server } from '../../test/mocks/handlers';
+import { server } from '../../test/setup';
 
 const createWrapper = () => {
   const queryClient = new QueryClient({
@@ -13,11 +14,13 @@ const createWrapper = () => {
   });
 
   return ({ children }) => (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        {children}
-      </AuthProvider>
-    </QueryClientProvider>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
   );
 };
 

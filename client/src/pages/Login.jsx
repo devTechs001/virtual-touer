@@ -63,12 +63,13 @@ const Login = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-dark-300 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-dark-300 mb-2">
                 Email Address
               </label>
               <div className="relative">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-500" />
                 <input
+                  id="email"
                   {...register('email')}
                   type="email"
                   placeholder="you@example.com"
@@ -83,7 +84,7 @@ const Login = () => {
             {/* Password */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm font-medium text-dark-300">
+                <label htmlFor="password" className="block text-sm font-medium text-dark-300">
                   Password
                 </label>
                 <Link to="/forgot-password" className="text-sm text-primary-400 hover:text-primary-300">
@@ -93,6 +94,7 @@ const Login = () => {
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-500" />
                 <input
+                  id="password"
                   {...register('password')}
                   type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
@@ -100,8 +102,10 @@ const Login = () => {
                 />
                 <button
                   type="button"
+                  data-testid="password-toggle"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-500 hover:text-dark-300"
+                  aria-label="Toggle password visibility"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>

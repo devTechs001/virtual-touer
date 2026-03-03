@@ -1,0 +1,10 @@
+# GitHub Pages Configuration for Virtual Tourist (2026)
+# This file is required for GitHub Pages deployment
+
+# GitHub Pages will automatically deploy from the gh-pages branch
+# or from the /docs folder, or via GitHub Actions
+
+# For this project, we use GitHub Actions (deploy-gh-pages.yml)
+# which builds and deploys the client/dist folder
+
+# No additional configuration needed here - see .github/workflows/deploy-gh-pages.yml

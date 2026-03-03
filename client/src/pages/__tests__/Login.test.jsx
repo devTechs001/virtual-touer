@@ -45,8 +45,8 @@ describe('Login Page', () => {
     const user = userEvent.setup();
     render(<Login />);
     
-    const emailInput = screen.getByLabelText(/Email Address/i);
-    const passwordInput = screen.getByLabelText(/Password/i);
+    const emailInput = screen.getByLabelText('Email Address');
+    const passwordInput = screen.getByLabelText('Password');
     
     await user.type(emailInput, 'john@example.com');
     await user.type(passwordInput, '123');
@@ -63,8 +63,8 @@ describe('Login Page', () => {
     const user = userEvent.setup();
     render(<Login />, { route: '/login' });
     
-    const emailInput = screen.getByLabelText(/Email Address/i);
-    const passwordInput = screen.getByLabelText(/Password/i);
+    const emailInput = screen.getByLabelText('Email Address');
+    const passwordInput = screen.getByLabelText('Password');
     
     await user.type(emailInput, 'john@example.com');
     await user.type(passwordInput, 'password123');
@@ -82,10 +82,10 @@ describe('Login Page', () => {
     const user = userEvent.setup();
     render(<Login />);
     
-    const passwordInput = screen.getByLabelText(/Password/i);
+    const passwordInput = screen.getByLabelText('Password');
     expect(passwordInput).toHaveAttribute('type', 'password');
     
-    const toggleButton = screen.getByRole('button');
+    const toggleButton = screen.getByTestId('password-toggle');
     await user.click(toggleButton);
     
     expect(passwordInput).toHaveAttribute('type', 'text');

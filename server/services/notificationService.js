@@ -1,5 +1,5 @@
-import Notification from '../models/Notification.model.js';
-import User from '../models/User.model.js';
+import Notification from '../models/Notification.js';
+import User from '../models/User.js';
 import sendEmail from '../utils/sendEmail.js';
 import webpush from 'web-push';
 

@@ -1,7 +1,7 @@
-import Achievement from '../models/Achievement.model.js';
-import UserAchievement from '../models/UserAchievement.model.js';
-import User from '../models/User.model.js';
-import Activity from '../models/Activity.model.js';
+import Achievement from '../models/Achievement.js';
+import UserAchievement from '../models/UserAchievements.js';
+import User from '../models/User.js';
+import Activity from '../models/Activity.js';
 
 class GamificationService {
   /**

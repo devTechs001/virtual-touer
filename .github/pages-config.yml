@@ -1,0 +1,139 @@
+# ============================================
+# GitHub Pages Configuration - Virtual Tourist (2026)
+# ============================================
+# Complete configuration for GitHub Pages deployment
+# ============================================
+
+# This configuration file provides additional settings for GitHub Pages
+# The main deployment is handled by .github/workflows/deploy-gh-pages.yml
+
+# ============================================
+# GITHUB PAGES SETTINGS
+# ============================================
+
+# GitHub Pages will deploy from:
+# - gh-pages branch (manual deployment)
+# - /docs folder (legacy, not used here)
+# - GitHub Actions (recommended, configured)
+
+# ============================================
+# REQUIRED FILES FOR GITHUB PAGES
+# ============================================
+
+# 1. .github/workflows/deploy-gh-pages.yml - CI/CD workflow
+# 2. client/public/CNAME - Custom domain (optional)
+# 3. vite.config.js - Base path configuration
+
+# ============================================
+# CUSTOM DOMAIN (Optional)
+# ============================================
+
+# To use a custom domain:
+# 1. Create client/public/CNAME with your domain
+# 2. Configure DNS with your domain provider
+# 3. Enable in GitHub Settings → Pages → Custom domain
+
+# Example CNAME file content:
+# virtual-tourist.com
+# or
+# www.virtual-tourist.com
+
+# ============================================
+# VITE CONFIGURATION
+# ============================================
+
+# Update client/vite.config.js:
+# 
+# export default defineConfig({
+#   base: '/virtual-tourist-virtual/',  // Your repo name
+#   plugins: [react()],
+#   build: {
+#     outDir: 'dist',
+#     sourcemap: true
+#   }
+# })
+
+# ============================================
+# ENVIRONMENT VARIABLES
+# ============================================
+
+# Create client/.env.production:
+#
+# VITE_API_URL=https://your-api.onrender.com/api
+# VITE_APP_URL=https://yourusername.github.io/virtual-tourist-virtual/
+# VITE_BASE_PATH=/virtual-tourist-virtual
+
+# ============================================
+# GITHUB ACTIONS WORKFLOW
+# ============================================
+
+# See: .github/workflows/deploy-gh-pages.yml
+
+# The workflow:
+# 1. Triggers on push to main branch
+# 2. Builds the client application
+# 3. Deploys to GitHub Pages
+# 4. Provides deployment URL in PR checks
+
+# ============================================
+# DEPLOYMENT STEPS
+# ============================================
+
+# Manual Deployment:
+# 1. cd client && npm run build
+# 2. npx gh-pages -d dist
+# 
+# Automatic Deployment:
+# 1. Push to main branch
+# 2. GitHub Actions deploys automatically
+
+# ============================================
+# POST-DEPLOYMENT
+# ============================================
+
+# After first deployment:
+# 1. Go to Settings → Pages
+# 2. Verify deployment source is "GitHub Actions"
+# 3. Check deployment status
+# 4. Visit your site at: https://yourusername.github.io/virtual-tourist-virtual/
+
+# ============================================
+# TROUBLESHOOTING
+# ============================================
+
+# Common Issues:
+# 
+# 1. 404 on page refresh
+#    - Already handled by workflow configuration
+# 
+# 2. Assets not loading
+#    - Check base path in vite.config.js
+# 
+# 3. API calls failing
+#    - Verify VITE_API_URL in .env.production
+#    - Check CORS on backend
+# 
+# 4. Build fails
+#    - Run npm run build locally to test
+#    - Check Node.js version (should be 20)
+
+# ============================================
+# SECURITY NOTES
+# ============================================
+
+# - Never commit .env files with real values
+# - Use GitHub Secrets for sensitive data
+# - Keep API keys in GitHub Secrets
+# - Use environment variables in workflow
+
+# ============================================
+# ADDITIONAL RESOURCES
+# ============================================
+
+# - GitHub Pages Docs: https://pages.github.com/
+# - Actions Docs: https://docs.github.com/en/actions
+# - Vite Deployment: https://vitejs.dev/guide/static-deploy.html
+
+# ============================================
+# END OF CONFIGURATION
+# ============================================

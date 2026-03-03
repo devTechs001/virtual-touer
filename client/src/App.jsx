@@ -27,6 +27,9 @@ const Register = lazy(() => import('./pages/Register'));
 const Checkout = lazy(() => import('./pages/Checkout'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const Maintenance = lazy(() => import('./pages/Maintenance'));
+const Features = lazy(() => import('./pages/Features'));
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/ContactPage'));
 
 // Admin Pages
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
@@ -57,6 +60,9 @@ function App() {
                 <Route path="destinations" element={<Destinations />} />
                 <Route path="destination/:id" element={<DestinationDetails />} />
                 <Route path="map" element={<Map />} />
+                <Route path="features" element={<Features />} />
+                <Route path="about" element={<About />} />
+                <Route path="contact" element={<Contact />} />
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
 

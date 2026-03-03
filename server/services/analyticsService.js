@@ -1,8 +1,8 @@
-import Activity from '../models/Activity.model.js';
-import Booking from '../models/Booking.model.js';
-import User from '../models/User.model.js';
-import Tour from '../models/Tour.model.js';
-import Review from '../models/Review.model.js';
+import Activity from '../models/Activity.js';
+import Booking from '../models/Booking.js';
+import User from '../models/User.js';
+import Tour from '../models/Tour.js';
+import Review from '../models/Review.js';
 
 class AnalyticsService {
   /**

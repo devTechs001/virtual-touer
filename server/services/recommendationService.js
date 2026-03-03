@@ -1,6 +1,6 @@
-import Tour from '../models/Tour.model.js';
-import Activity from '../models/Activity.model.js';
-import Favorite from '../models/Favorite.model.js';
+import Tour from '../models/Tour.js';
+import Activity from '../models/Activity.js';
+import Favorite from '../models/Favourite.js';
 
 class RecommendationService {
   /**

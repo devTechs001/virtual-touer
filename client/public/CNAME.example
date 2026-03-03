@@ -1,0 +1,36 @@
+# Custom Domain Configuration for GitHub Pages
+# ============================================
+# 
+# To use a custom domain with GitHub Pages:
+# 
+# 1. Replace this entire file with your domain name only:
+#    example.com
+#    or
+#    www.example.com
+# 
+# 2. Configure DNS with your domain provider:
+# 
+#    For apex domain (example.com):
+#    Type: A
+#    Name: @
+#    Value: 185.199.108.153
+#    TTL: 3600
+#    
+#    (Repeat for these IPs:)
+#    185.199.109.153
+#    185.199.110.153
+#    185.199.111.153
+# 
+#    For subdomain (www.example.com):
+#    Type: CNAME
+#    Name: www
+#    Value: yourusername.github.io
+#    TTL: 3600
+# 
+# 3. In GitHub: Settings → Pages → Custom domain
+#    Enter your domain and save
+# 
+# 4. Check "Enforce HTTPS" after DNS propagates
+# 
+# Leave this file as-is to use GitHub Pages subdomain:
+# yourusername.github.io/virtual-tourist-virtual/

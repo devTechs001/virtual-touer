@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
 const API_URL = '/api';
+const FULL_API_URL = 'http://localhost:5000/api';
 
 // Mock data
 export const mockTours = [

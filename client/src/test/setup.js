@@ -1,8 +1,11 @@
 import '@testing-library/jest-dom';
-import { afterAll, afterEach, beforeAll } from 'vitest';
+import { afterAll, afterEach, beforeAll, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import { setupServer } from 'msw/node';
 import { handlers } from './mocks/handlers';
+
+// Set test environment to use relative API URLs
+process.env.VITE_API_URL = '/api';
 
 // Setup MSW server
 export const server = setupServer(...handlers);
@@ -94,3 +97,28 @@ vi.mock('react-hot-toast', () => ({
     promise: vi.fn()
   }
 }));
+
+// Mock axios structuredClone issue in jsdom
+if (typeof global.structuredClone === 'undefined') {
+  global.structuredClone = (obj) => {
+    // Don't actually clone functions, just return a simple clone
+    if (typeof obj === 'function') {
+      return obj;
+    }
+    try {
+      return JSON.parse(JSON.stringify(obj));
+    } catch {
+      // If can't serialize, return the object as-is
+      return obj;
+    }
+  };
+}
+
+// Also override Node.js util.types.isAsyncFunction to prevent axios issues
+if (typeof global.util === 'undefined') {
+  global.util = {
+    types: {
+      isAsyncFunction: () => false
+    }
+  };
+}

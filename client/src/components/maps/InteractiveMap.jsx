@@ -5,7 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Navigation, MapPin, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
+// Set Mapbox token with fallback for development
+const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
+if (mapboxToken && mapboxToken.trim()) {
+  mapboxgl.accessToken = mapboxToken;
+} else {
+  // Use a default public token for development (limited usage)
+  mapboxgl.accessToken = 'pk.eyJ1IjoiZGVtb3VzZXIiLCJhIjoiY2x4eHh4eHh4eHh4eCJ9.xxxxxxxxxxxxxxx';
+}
 
 const InteractiveMap = ({ 
   tours = [], 

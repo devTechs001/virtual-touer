@@ -1,124 +1,166 @@
 # ============================================
-# DEPENDENCIES
+# GLOBAL .GITIGNORE - Virtual Tourist (2026)
 # ============================================
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-.pnpm-store/
+# This file ensures sensitive files are never committed
+# ============================================
 
 # ============================================
-# ENVIRONMENT VARIABLES & SECRETS
+# 🔐 ENVIRONMENT VARIABLES & SECRETS
 # ============================================
+# All .env files except examples
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env*.example
+.env.*
 !.env.example
+.env.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
+.env*.local
+.env*.sample
 *.env
 .env~
-.env.*.local
-.env.*.local.sample
+.envrc
+.envrc.local
 
-# API Keys & Secrets
+# API Keys & Credentials
 *.pem
 *.key
 *.crt
 *.cer
 *.p12
 *.pfx
+*.p8
+*.jks
+*.keystore
+*.truststore
+
+# Secret files
 secrets/
 secret/
 .private
-*.private
-
-# Credentials
 credentials/
 credentials.json
+credentials.yaml
+credentials.yml
+credentials.toml
 service-account*.json
 *-service-account.json
+*-adminsdk*.json
+*-credentials.json
+*-keys.json
 firebase-config*.js
+firebase-adminsdk*.json
 firebase-service-account*.json
+google-services*.json
+GoogleService-Info.plist
+aws-credentials
+.aws/credentials
+.aws/config
+.azure/
+.gcp/
 
 # ============================================
-# BUILD OUTPUT
+# 💳 PAYMENT & API KEYS
 # ============================================
-dist/
-build/
-*.local
-*.tsbuildinfo
+# Stripe
+stripe-keys.json
+stripe-secret*
+stripe-webhook-secret*
+
+# PayPal
+paypal-config*
+paypal-secret*
+
+# Other payment processors
+razorpay*
+square*
+braintree*
 
 # ============================================
-# EDITOR DIRECTORIES AND FILES
+# ☁️ CLOUD PROVIDER SECRETS
 # ============================================
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
-!.vscode/tasks.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-*~
-._*
-.Spotlight-V100
-.Trashes
+# AWS
+.aws/credentials
+.aws/config
+aws_access_key
+aws_secret_key
+
+# Google Cloud
+gcloud/
+application_default_credentials.json
+*-service-account-key.json
+
+# Azure
+azure.json
+azure-credentials.json
+azuredeploy.parameters.json
+
+# DigitalOcean
+.digitalocean/
+doctl/config.yaml
 
 # ============================================
-# LOGS
+# 🗄️ DATABASE SECRETS
 # ============================================
-logs/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+# MongoDB
+mongodb-uri*
+mongo-credentials*
+atlas-credentials*
+
+# Connection strings with passwords
+*mongodb+srv://*:*@*
+*mongodb://*:*@*
+
+# Database dumps with data
+*.dump/
+*.sql
+!*.sql.example
 
 # ============================================
-# TESTING
+# 📧 EMAIL & COMMUNICATION
 # ============================================
-coverage/
-.nyc_output/
-*.lcov
-.jest/
-test-results/
-playwright-report/
-test-report.html
+# Email credentials
+email-config*
+smtp-credentials*
+sendgrid*
+mailgun*
+mailchimp*
 
 # ============================================
-# DOCKER
+# 🔑 AUTHENTICATION & ENCRYPTION
 # ============================================
-docker-compose.override.yml
-.docker/
+# JWT Secrets
+jwt-secret*
+jwt-key*
+auth-secret*
+
+# Encryption keys
+encryption-key*
+private-key*
+master-key*
+
+# OAuth secrets
+oauth-secret*
+client-secret*
 
 # ============================================
-# DATABASE
+# 📝 CONFIGURATION FILES WITH SECRETS
 # ============================================
-*.sqlite
-*.sqlite3
-*.db
-data/
-uploads/
-public/uploads/
+# Config files that might contain secrets
+config.local.*
+config.local.json
+config.local.yaml
+config.local.yml
+config.secret.*
+config.private.*
+settings.local.*
+settings.secret.*
 
 # ============================================
-# OS
-# ============================================
-Thumbs.db
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# ============================================
-# DOCUMENTATION WITH SECRETS
+# 📄 DOCUMENTATION WITH SECRETS
 # ============================================
 # Never commit these files
 **/secrets.md
@@ -127,201 +169,156 @@ Thumbs.db
 **/passwords.md
 **/api-keys.md
 **/private-keys.md
+**/tokens.md
 **/*.secret.md
 **/*.credentials.md
 **/*.passwords.md
 **/*.api-keys.md
+**/*.tokens.md
 
 # Backup files that might contain secrets
 *.bak
 *.backup
+*.backup-*
 *.old
 *.orig
 *~
+*.swp
+*.swo
 
 # ============================================
-# MISCELLANEOUS
+# 🚀 DEPLOYMENT SECRETS
 # ============================================
-.cache/
-.temp/
-.tmp/
-.parcel-cache/
-.vercel/
+# Netlify
 .netlify/
+.netlify.toml
+!.netlify.toml
+
+# Render
+render-key*
+render-secret*
+
+# Vercel
+.vercel/
+.vercel.json
+!.vercel.example.json
+
+# Heroku
+.heroku/
+Procfile.local
 
 # ============================================
-# DOCUMENTATION
+# 💻 DEVELOPMENT TOOLS
 # ============================================
-# Keep main project docs, ignore temporary/summary docs
-!README.md
-!SETUP.md
-!CONTRIBUTING.md
-!CHANGELOG.md
-!LICENSE
-!docs/
-!documentation/
-
-# Ignore temporary/summary documentation files
-*_SUMMARY.md
-*_COMPLETE.md
-UPDATES_*.md
-DEPLOYMENT.md
-DATABASE_CONFIG.md
-SETUP_DEPLOYMENT.md
-CONFIGURATION_COMPLETE.md
-TESTING_COMPLETE.md
-FINAL_TESTING_SUMMARY.md
-SECURITY_*.md
-SECRETS_GUIDE.md
-
-# API documentation (auto-generated)
-api-docs/
-apidoc/
-documentation-generated/
-
-# Meeting notes
-meeting-notes/
-*.meeting.md
-notes/
-
-# Personal notes
-*.notes.md
-TODO.md
-WISHLIST.md
-IDEAS.md
+# IDE secrets
+.vscode/settings.json
+!.vscode/settings.json.example
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries/
+.idea/shelf/
 
 # ============================================
-# BUILD ARTIFACTS
+# 📦 DEPENDENCIES
 # ============================================
-# Build outputs
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-store/
+.npm/
+.yarn/
+
+# ============================================
+# 🏗️ BUILD OUTPUT
+# ============================================
 dist/
 build/
-out/
+*.local
+*.tsbuildinfo
 .next/
 .nuxt/
 .output/
-
-# Compiled files
-*.class
-*.o
-*.so
-*.dll
-*.exe
-*.app
-*.pkg
-
-# Bundle files
-*.bundle.js
-*.bundle.css
-*.min.js
-*.min.css
-
-# Source maps
-*.map
-*.sourcemap
-
-# TypeScript build info
-*.tsbuildinfo
-
-# Build logs
-build.log
-build-output.log
-
-# Webpack
-.webpack/
-.webpack-cache/
-
-# Rollup
-.rollup.cache/
-
-# Parcel
-.parcel-cache/
-.cache/
-
-# Vite
-.vite/
-vite.config.ts.timestamp-*
-
-# ESLint cache
-.eslintcache
-
-# Stylelint cache
-.stylelintcache
+out/
 
 # ============================================
-# PACKAGE MANAGER
+# 📊 LOGS
 # ============================================
-# pnpm
-pnpm-lock.yaml
-.pnpm-store/
-
-# yarn
-yarn.lock
-.yarn/
-.yarn-integrity
-
-# npm
-package-lock.json
-npm-shrinkwrap.json
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+error.log
+access.log
+debug.log
 
 # ============================================
-# IDE & EDITOR
+# 🧪 TESTING
 # ============================================
-# VSCode
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
-!.vscode/tasks.json
-.vscode-test/
-
-# IntelliJ
-.idea/
-*.iml
-*.ipr
-*.iws
-
-# Eclipse
-.project
-.classpath
-.settings/
-
-# Sublime Text
-*.sublime-project
-*.sublime-workspace
-
-# Vim
-*.swp
-*.swo
-*~
-.netrwhist
-
-# Emacs
-*~
-\#*\#
-.\#*
+coverage/
+.nyc_output/
+*.lcov
+.jest/
+test-results/
+playwright-report/
+test-report.html
+*.test.log
 
 # ============================================
-# OPERATING SYSTEM
+# 🐳 DOCKER
+# ============================================
+docker-compose.override.yml
+docker-compose.local.yml
+.docker/
+.docker.env
+.docker-env
+
+# ============================================
+# 🗄️ DATABASE & UPLOADS
+# ============================================
+*.sqlite
+*.sqlite3
+*.db
+data/
+uploads/
+public/uploads/
+tmp/
+temp/
+*.tmp
+*.temp
+
+# ============================================
+# 🖥️ OPERATING SYSTEM
 # ============================================
 # macOS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
 .AppleDouble
 .LSOverride
-._*
 .DocumentRevisions-V100/
 .fseventsd/
-.Spotlight-V100/
 .TemporaryItems/
-.Trashes/
+.Trash-*
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
 
 # Windows
 Thumbs.db
+Thumbs.db:encryptable
 ehthumbs.db
+ehthumbs_vista.db
 Desktop.ini
 $RECYCLE.BIN/
 @eaDir/
+System Volume Information/
 
 # Linux
 *~
@@ -329,4 +326,74 @@ $RECYCLE.BIN/
 .Trash-*
 .nfs*
 
+# ============================================
+# 📝 PROJECT-SPECIFIC (Virtual Tourist)
+# ============================================
+# Keep main docs, ignore secret-related docs
+**/SECRETS*.md
+**/CREDENTIALS*.md
+**/API_KEYS*.md
 
+# Backup environment files
+.env.backup
+.env.*.backup
+.env.bak
+.env.*.bak
+
+# ============================================
+# ✅ FILES TO KEEP (Exceptions)
+# ============================================
+# Keep example env files
+!.env.example
+!client/.env.example
+!server/.env.example
+
+# Keep main documentation
+!README.md
+!docs/
+!CONTRIBUTING.md
+!CHANGELOG.md
+!LICENSE
+
+# Keep example config files
+!*.example
+!*.sample
+!*.template
+!*.dist
+
+# Keep VSCode extensions config
+!.vscode/extensions.json
+
+# ============================================
+# 🔒 ADDITIONAL SECURITY PATTERNS
+# ============================================
+# Files with password in name
+*password*
+*passwd*
+
+# Files with token in name (except examples)
+*token*
+!*.token.example
+
+# Files with secret in name (except examples)
+*secret*
+!*.secret.example
+
+# Files with key in name (except examples)
+*key*
+!*.key.example
+!README.md
+!package.json
+
+# Files with credential in name
+*credential*
+
+# Files with private in name
+*private*
+
+# ============================================
+# END OF GITIGNORE
+# ============================================
+# Remember: Never commit sensitive information
+# Use environment variables or secret managers
+# ============================================

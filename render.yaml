@@ -1,50 +1,231 @@
-# Render Configuration
-# https://render.com/docs/blueprint-spec
+# ============================================
+# Render Configuration - Virtual Tourist (2026)
+# ============================================
+# Documentation: https://render.com/docs/infrastructure-as-code
+# ============================================
 
 services:
-  # Frontend Service (Static Site)
+  # ============================================
+  # BACKEND API SERVICE
+  # ============================================
   - type: web
-    name: virtual-tourist-frontend
-    env: static
-    buildCommand: cd client && pnpm install && pnpm build
-    staticPublishPath: ./client/dist
-    envVars:
-      - key: NODE_VERSION
-        value: 20
-      - key: VITE_API_URL
-        sync: false
-      - key: VITE_APP_NAME
-        sync: false
-
-  # Backend Service (Node.js)
-  - type: web
-    name: virtual-tourist-backend
+    name: virtual-tourist-api
     env: node
     region: oregon
     plan: free
-    buildCommand: cd server && pnpm install
-    startCommand: cd server && pnpm start
-    healthCheckPath: /api/health
+    branch: main
+    rootDir: server
+    
+    # Build & Start
+    buildCommand: npm install
+    startCommand: npm start
+    
+    # Health Check
+    healthCheckPath: /health
+    healthCheckTimeout: 180
+    
+    # Scaling (paid plans)
+    # numInstances: 1
+    # autoScaling:
+    #   minInstances: 1
+    #   maxInstances: 3
+    
+    # Environment Variables
     envVars:
-      - key: NODE_VERSION
-        value: 20
-      - key: MONGODB_URI
-        sync: false
-      - key: JWT_SECRET
-        generateValue: true
-      - key: PORT
-        value: 5000
+      # Core
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: 5000
+      
+      # Database (sync from Render Dashboard or use Atlas)
+      - key: MONGODB_URI
+        sync: false
+      
+      # Authentication
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRE
+        value: 30d
+      
+      # CORS
+      - key: CLIENT_URL
+        value: https://virtual-tourist.netlify.app
+      - key: CORS_ORIGIN
+        value: https://virtual-tourist.netlify.app
+      
+      # Rate Limiting (stricter for production)
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 900000
+      - key: RATE_LIMIT_MAX_REQUESTS
+        value: 100
+      
+      # Logging
+      - key: LOG_LEVEL
+        value: info
+      
+      # Email (optional)
+      - key: EMAIL_SERVICE
+        value: gmail
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASSWORD
+        sync: false
+      
+      # Cloudinary (optional)
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      
+      # Stripe (optional)
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PUBLISHABLE_KEY
+        sync: false
+      
+      # Feature Flags
+      - key: ENABLE_EMAIL_VERIFICATION
+        value: false
+      - key: ENABLE_PAYMENT
+        value: false
+      - key: ENABLE_SOCIAL_FEATURES
+        value: true
 
-  # Database (MongoDB Atlas - Primary)
-  # Note: Create MongoDB Atlas cluster separately
-  # Connection string will be in MONGODB_URI env var
+    # Disk (optional, for file uploads)
+    # disk:
+    #   name: uploads
+    #   mountPath: /app/uploads
+    #   sizeGB: 5
 
-  # Cron Job for database seeding
-  - type: cron
-    name: virtual-tourist-seed
-    env: node
-    buildCommand: cd server && pnpm install
-    startCommand: cd server && pnpm run seed:all
-    schedule: "0 0 * * 0"  # Weekly on Sunday at midnight
+  # ============================================
+  # WORKER SERVICE (Background Jobs)
+  # ============================================
+  # Uncomment for background processing
+  # - type: worker
+  #   name: virtual-tourist-worker
+  #   env: node
+  #   rootDir: server
+  #   buildCommand: npm install
+  #   startCommand: npm run worker
+  #   envVars:
+  #     - key: NODE_ENV
+  #       value: production
+  #     - key: MONGODB_URI
+  #       sync: false
+
+  # ============================================
+  # CRON JOBS
+  # ============================================
+  # Uncomment for scheduled tasks
+  
+  # Daily backup job
+  # - type: cron
+  #   name: virtual-tourist-backup
+  #   env: node
+  #   rootDir: server
+  #   buildCommand: npm install
+  #   startCommand: node scripts/backup.js
+  #   schedule: "0 2 * * *"  # Daily at 2 AM UTC
+  #   envVars:
+  #     - key: MONGODB_URI
+  #       sync: false
+  #     - key: BACKUP_BUCKET
+  #       sync: false
+  
+  # Weekly cleanup job
+  # - type: cron
+  #   name: virtual-tourist-cleanup
+  #   env: node
+  #   rootDir: server
+  #   buildCommand: npm install
+  #   startCommand: node scripts/cleanup.js
+  #   schedule: "0 3 * * 0"  # Weekly on Sunday at 3 AM UTC
+
+  # ============================================
+  # REDIS (Optional - for caching)
+  # ============================================
+  # Uncomment if using Redis
+  # - type: redis
+  #   name: virtual-tourist-redis
+  #   plan: free
+  #   region: oregon
+  #   maxmemoryPolicy: noeviction
+  #   ipAllowList: []  # Allow all IPs (restrict in production)
+
+# ============================================
+# DATABASE (Alternative to MongoDB Atlas)
+# ============================================
+# Uncomment if using Render PostgreSQL
+# databases:
+#   - name: virtual-tourist-db
+#     databaseName: virtual_tourist
+#     user: virtual_tourist_user
+#     plan: free
+#     region: oregon
+#     postgresMajorVersion: 15
+#     diskSizeGB: 1
+#     backups:
+#       retention: 7  # Keep 7 days of backups
+
+# ============================================
+# STATIC SITE (Alternative to Netlify)
+# ============================================
+# Uncomment to host frontend on Render too
+# - type: static
+#   name: virtual-tourist-site
+#   env: static
+#   rootDir: client
+#   buildCommand: npm install && npm run build
+#   staticPublishPath: ./dist
+#   envVars:
+#     - key: VITE_API_URL
+#       value: https://virtual-tourist-api.onrender.com/api
+#   routes:
+#     - type: rewrite
+#       source: /*
+#       destination: /index.html
+
+# ============================================
+# ENVIRONMENT GROUPS (for managing multiple envs)
+# ============================================
+# envGroups:
+#   - name: production
+#     envVars:
+#       - key: NODE_ENV
+#         value: production
+#       - key: LOG_LEVEL
+#         value: info
+#   - name: staging
+#     envVars:
+#       - key: NODE_ENV
+#         value: staging
+#       - key: LOG_LEVEL
+#         value: debug
+
+# ============================================
+# DEPLOYMENT NOTES
+# ============================================
+# 
+# 1. Import this file:
+#    - Go to Render Dashboard
+#    - Click "New +" → "Blueprint"
+#    - Connect repository with render.yaml
+#
+# 2. Set required secrets in Dashboard:
+#    - MONGODB_URI
+#    - EMAIL_USER
+#    - EMAIL_PASSWORD
+#    - CLOUDINARY_*
+#    - STRIPE_*
+#
+# 3. Deploy will start automatically
+#
+# 4. Monitor in Dashboard:
+#    - Logs
+#    - Metrics
+#    - Alerts
+#
+# ============================================

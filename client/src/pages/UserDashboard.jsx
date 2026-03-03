@@ -439,9 +439,9 @@ const UserDashboard = () => {
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-white">Achievements</h3>
-                <Link to="/profile/achievements" className="text-sm text-primary-400">
+                <a href="#achievements" className="text-sm text-primary-400">
                   View all
-                </Link>
+                </a>
               </div>
               <div className="grid grid-cols-4 gap-3">
                 {(achievements?.badges || [

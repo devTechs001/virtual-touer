@@ -1,5 +1,5 @@
-import SystemConfig from '../models/SystemConfig.model.js';
-import User from '../models/User.model.js';
+import SystemConfig from '../models/SystemConfig.models.js';
+import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 
 const maintenanceMiddleware = async (req, res, next) => {
