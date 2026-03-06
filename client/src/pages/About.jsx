@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import { Users, Target, Heart, Globe2, Award, ArrowRight, Code, Palette, Server, Smartphone } from 'lucide-react';
 
 const devTeam = [
-  { name: 'Wanjiru Kamau', role: 'Founder & CEO', image: 'https://i.pravatar.cc/150?img=5', icon: Users },
-  { name: 'Omondi Okello', role: 'CTO', image: 'https://i.pravatar.cc/150?img=11', icon: Server },
-  { name: 'Achieng Odhiambo', role: 'Head of Design', image: 'https://i.pravatar.cc/150?img=9', icon: Palette },
-  { name: 'Kipchoge Kiprop', role: 'Lead Developer', image: 'https://i.pravatar.cc/150?img=13', icon: Code },
-  { name: 'Njeri Mwangi', role: 'Mobile Lead', image: 'https://i.pravatar.cc/150?img=10', icon: Smartphone },
-  { name: 'Mutua Kimani', role: 'Head of Community', image: 'https://i.pravatar.cc/150?img=12', icon: Heart }
+  { name: 'DEV TECHS', role: 'Founder & CEO', image: 'https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=400', icon: Users, bio: 'Visionary tech entrepreneur from Nairobi, passionate about showcasing Africa to the world' },
+  { name: 'Omondi Okello', role: 'CTO', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400', icon: Server, bio: 'Full-stack engineer with 10+ years building scalable platforms' },
+  { name: 'Achieng Odhiambo', role: 'Head of Design', image: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400', icon: Palette, bio: 'Award-winning UX designer focused on African aesthetics' },
+  { name: 'Kipchoge Kiprop', role: 'Lead Developer', image: 'https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=400', icon: Code, bio: 'Backend specialist with expertise in distributed systems' },
+  { name: 'Njeri Mwangi', role: 'Mobile Lead', image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400', icon: Smartphone, bio: 'Mobile-first advocate building for Africa\'s next billion users' },
+  { name: 'Mutua Kimani', role: 'Head of Community', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400', icon: Heart, bio: 'Community builder connecting travelers across the continent' }
 ];
 
 const values = [
@@ -166,7 +166,8 @@ export default function About() {
                     <Icon className="w-4 h-4 text-primary-400" />
                     <h3 className="text-lg font-bold text-white">{member.name}</h3>
                   </div>
-                  <p className="text-primary-400">{member.role}</p>
+                  <p className="text-primary-400 font-medium mb-2">{member.role}</p>
+                  <p className="text-dark-400 text-sm">{member.bio}</p>
                 </motion.div>
               );
             })}

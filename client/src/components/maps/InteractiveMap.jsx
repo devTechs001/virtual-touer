@@ -14,13 +14,13 @@ if (mapboxToken && mapboxToken.trim()) {
   mapboxgl.accessToken = 'pk.eyJ1IjoiZGVtb3VzZXIiLCJhIjoiY2x4eHh4eHh4eHh4eCJ9.xxxxxxxxxxxxxxx';
 }
 
-const InteractiveMap = ({ 
-  tours = [], 
+const InteractiveMap = ({
+  tours = [],
   destinations = [],
-  center = [0, 20],
-  zoom = 2,
+  center = [37.9062, 0.3476], // Center on Kenya/East Africa
+  zoom = 3.5, // Zoomed in to show Africa prominently
   onMarkerClick,
-  selectedId = null 
+  selectedId = null
 }) => {
   const mapContainer = useRef(null);
   const map = useRef(null);
