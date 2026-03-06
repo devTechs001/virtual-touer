@@ -2,11 +2,16 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [
     react({
-      jsxRuntime: 'automatic'
+      jsxRuntime: 'automatic',
+      // Fix: Ensure proper React import transformation
+      jsxImportSource: 'react'
     }),
     VitePWA({
       registerType: 'prompt',
@@ -43,6 +48,7 @@ export default defineConfig({
         skipWaiting: true,
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/^\/api\//, /^\/auth\//],
+        // Fix: Properly handle response cloning
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/api\.mapbox\.com\/.*/i,
@@ -52,6 +58,9 @@ export default defineConfig({
               expiration: {
                 maxEntries: 50,
                 maxAgeSeconds: 60 * 60 * 24 * 30
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
               }
             }
           },
@@ -63,6 +72,9 @@ export default defineConfig({
               expiration: {
                 maxEntries: 100,
                 maxAgeSeconds: 60 * 60 * 24
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
               }
             }
           }
@@ -80,26 +92,30 @@ export default defineConfig({
       '@utils': path.resolve(__dirname, './src/utils'),
       '@context': path.resolve(__dirname, './src/context'),
       '@assets': path.resolve(__dirname, './src/assets')
-    }
+    },
+    // Fix: Deduplicate React to prevent multiple instances
+    dedupe: ['react', 'react-dom']
+  },
+  // Fix for pnpm: Ensure React is properly linked
+  define: {
+    'process.env': {}
   },
   optimizeDeps: {
     include: [
       'react',
       'react-dom',
-      'react-router-dom'
+      'react-router-dom',
+      '@tanstack/react-query'
     ]
   },
   server: {
-    port: 3000,
-    hmr: {
-      host: 'localhost',
-      port: 3001,
-      protocol: 'ws'
-    },
+    port: 5173,
+    strictPort: true,
     proxy: {
       '/api': {
         target: 'http://localhost:5000',
-        changeOrigin: true
+        changeOrigin: true,
+        secure: false
       }
     }
   },

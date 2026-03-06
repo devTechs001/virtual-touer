@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   User,
   Map,
@@ -15,7 +15,18 @@ import {
   Globe2,
   Award,
   Flame,
-  MapPin
+  MapPin,
+  Zap,
+  TrendingDown,
+  ArrowUpRight,
+  ArrowDownRight,
+  Sparkles,
+  Eye,
+  Share2,
+  MessageCircle,
+  Bookmark,
+  CheckCircle2,
+  AlertCircle
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -23,7 +34,14 @@ import {
   Pie,
   Cell,
   ResponsiveContainer,
-  Tooltip
+  Tooltip,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  AreaChart,
+  Area
 } from 'recharts';
 
 import { useAuth } from '../context/AuthContext';
@@ -59,7 +77,10 @@ const UserDashboard = () => {
     countriesVisited: 7,
     currentStreak: 5,
     totalPoints: 2450,
-    level: 'Explorer'
+    level: 'Explorer',
+    lastMonthTours: 8,
+    lastMonthWatchTime: 6.2,
+    levelProgress: 65
   };
 
   const categoryData = dashboardData?.categoryBreakdown || [
@@ -74,6 +95,25 @@ const UserDashboard = () => {
   const continueWatching = dashboardData?.continueWatching || [];
   const newDestinations = dashboardData?.newDestinations || [];
   const featuredTours = dashboardData?.featuredTours || [];
+
+  // Calculate trends
+  const toursTrend = stats.toursCompleted > stats.lastMonthTours
+    ? ((stats.toursCompleted - stats.lastMonthTours) / stats.lastMonthTours * 100).toFixed(1)
+    : 0;
+  const watchTimeTrend = stats.totalWatchTime > stats.lastMonthWatchTime
+    ? ((stats.totalWatchTime - stats.lastMonthWatchTime) / stats.lastMonthWatchTime * 100).toFixed(1)
+    : 0;
+
+  // Activity data for chart
+  const activityData = dashboardData?.activityData || [
+    { day: 'Mon', tours: 2, hours: 1.5 },
+    { day: 'Tue', tours: 3, hours: 2.0 },
+    { day: 'Wed', tours: 1, hours: 0.5 },
+    { day: 'Thu', tours: 4, hours: 3.0 },
+    { day: 'Fri', tours: 2, hours: 1.8 },
+    { day: 'Sat', tours: 5, hours: 4.2 },
+    { day: 'Sun', tours: 3, hours: 2.5 }
+  ];
 
   // Get active tab from URL params
   const tabFromUrl = searchParams.get('tab');
@@ -127,60 +167,101 @@ const UserDashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="card p-6"
+            className="card p-6 relative overflow-hidden"
           >
-            <div className="flex items-center gap-3 mb-3">
+            <div className="flex items-center justify-between mb-3">
               <div className="w-10 h-10 rounded-xl bg-primary-500/20 flex items-center justify-center">
                 <Map className="w-5 h-5 text-primary-400" />
               </div>
-              <span className="text-dark-400 text-sm">Tours Completed</span>
+              {toursTrend > 0 ? (
+                <div className="flex items-center gap-1 text-green-400 text-xs">
+                  <TrendingUp className="w-3 h-3" />
+                  <span>+{toursTrend}%</span>
+                </div>
+              ) : toursTrend < 0 ? (
+                <div className="flex items-center gap-1 text-red-400 text-xs">
+                  <TrendingDown className="w-3 h-3" />
+                  <span>{toursTrend}%</span>
+                </div>
+              ) : null}
             </div>
-            <p className="text-3xl font-bold text-white">{stats.toursCompleted}</p>
+            <p className="text-3xl font-bold text-white mb-1">{stats.toursCompleted}</p>
+            <p className="text-dark-400 text-sm">Tours Completed</p>
+            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-primary-500/5 rounded-full" />
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="card p-6"
+            className="card p-6 relative overflow-hidden"
           >
-            <div className="flex items-center gap-3 mb-3">
+            <div className="flex items-center justify-between mb-3">
               <div className="w-10 h-10 rounded-xl bg-secondary-500/20 flex items-center justify-center">
                 <Clock className="w-5 h-5 text-secondary-400" />
               </div>
-              <span className="text-dark-400 text-sm">Watch Time</span>
+              {watchTimeTrend > 0 ? (
+                <div className="flex items-center gap-1 text-green-400 text-xs">
+                  <TrendingUp className="w-3 h-3" />
+                  <span>+{watchTimeTrend}%</span>
+                </div>
+              ) : watchTimeTrend < 0 ? (
+                <div className="flex items-center gap-1 text-red-400 text-xs">
+                  <TrendingDown className="w-3 h-3" />
+                  <span>{watchTimeTrend}%</span>
+                </div>
+              ) : null}
             </div>
-            <p className="text-3xl font-bold text-white">{stats.totalWatchTime}h</p>
+            <p className="text-3xl font-bold text-white mb-1">{stats.totalWatchTime}h</p>
+            <p className="text-dark-400 text-sm">Watch Time</p>
+            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-secondary-500/5 rounded-full" />
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="card p-6"
+            className="card p-6 relative overflow-hidden"
           >
-            <div className="flex items-center gap-3 mb-3">
+            <div className="flex items-center justify-between mb-3">
               <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
                 <Globe2 className="w-5 h-5 text-purple-400" />
               </div>
-              <span className="text-dark-400 text-sm">Countries</span>
             </div>
-            <p className="text-3xl font-bold text-white">{stats.countriesVisited}</p>
+            <p className="text-3xl font-bold text-white mb-1">{stats.countriesVisited}</p>
+            <p className="text-dark-400 text-sm">Countries Visited</p>
+            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-purple-500/5 rounded-full" />
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="card p-6"
+            className="card p-6 relative overflow-hidden"
           >
-            <div className="flex items-center gap-3 mb-3">
+            <div className="flex items-center justify-between mb-3">
               <div className="w-10 h-10 rounded-xl bg-yellow-500/20 flex items-center justify-center">
                 <Award className="w-5 h-5 text-yellow-400" />
               </div>
-              <span className="text-dark-400 text-sm">Level</span>
             </div>
-            <p className="text-xl font-bold text-white">{stats.level}</p>
+            <div className="flex items-end gap-2 mb-1">
+              <p className="text-3xl font-bold text-white">{stats.level}</p>
+            </div>
+            <div className="mt-2">
+              <div className="flex items-center justify-between text-xs mb-1">
+                <span className="text-dark-400">Progress to next level</span>
+                <span className="text-yellow-400">{stats.levelProgress || 65}%</span>
+              </div>
+              <div className="h-1.5 bg-dark-700 rounded-full overflow-hidden">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${stats.levelProgress || 65}%` }}
+                  transition={{ duration: 1, delay: 0.5 }}
+                  className="h-full bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-full"
+                />
+              </div>
+            </div>
+            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-yellow-500/5 rounded-full" />
           </motion.div>
         </div>
 
@@ -280,7 +361,95 @@ const UserDashboard = () => {
                 </p>
               </motion.div>
             )}
-            {/* Continue Watching */}
+            {/* Weekly Activity Chart */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="card p-6"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-yellow-400" />
+                  Weekly Activity
+                </h2>
+                <div className="flex items-center gap-2 text-sm text-dark-400">
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded-full bg-primary-500" />
+                    <span>Tours</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded-full bg-secondary-500" />
+                    <span>Hours</span>
+                  </div>
+                </div>
+              </div>
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={activityData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="toursGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                      </linearGradient>
+                      <linearGradient id="hoursGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+                    <XAxis
+                      dataKey="day"
+                      stroke="#64748b"
+                      tick={{ fill: '#64748b', fontSize: 12 }}
+                      axisLine={{ stroke: '#334155' }}
+                    />
+                    <YAxis
+                      stroke="#64748b"
+                      tick={{ fill: '#64748b', fontSize: 12 }}
+                      axisLine={{ stroke: '#334155' }}
+                    />
+                    <Tooltip
+                      content={({ active, payload, label }) => {
+                        if (active && payload && payload.length) {
+                          return (
+                            <div className="bg-dark-800 border border-dark-700 rounded-xl p-4 shadow-xl">
+                              <p className="text-dark-400 text-sm mb-2">{label}</p>
+                              {payload.map((item, index) => (
+                                <div key={index} className="flex items-center gap-2">
+                                  <div
+                                    className="w-3 h-3 rounded-full"
+                                    style={{ backgroundColor: item.color }}
+                                  />
+                                  <span className="text-dark-300 text-sm">{item.name}:</span>
+                                  <span className="text-white font-medium">{item.value}</span>
+                                </div>
+                              ))}
+                            </div>
+                          );
+                        }
+                        return null;
+                      }}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="tours"
+                      name="Tours"
+                      stroke="#3b82f6"
+                      strokeWidth={2}
+                      fill="url(#toursGradient)"
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="hours"
+                      name="Hours"
+                      stroke="#22c55e"
+                      strokeWidth={2}
+                      fill="url(#hoursGradient)"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </motion.div>
             {continueWatching.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}

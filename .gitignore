@@ -341,6 +341,13 @@ System Volume Information/
 .env.*.bak
 
 # ============================================
+# 📚 DOCUMENTATION FILES (Ignore except main)
+# ============================================
+# Ignore all .md files in root except README.md
+*.md
+!README.md
+
+# ============================================
 # ✅ FILES TO KEEP (Exceptions)
 # ============================================
 # Keep example env files
@@ -350,10 +357,10 @@ System Volume Information/
 
 # Keep main documentation
 !README.md
-!docs/
 !CONTRIBUTING.md
 !CHANGELOG.md
 !LICENSE
+!docs/
 
 # Keep example config files
 !*.example

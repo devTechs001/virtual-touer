@@ -1,12 +1,14 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Users, Target, Heart, Globe2, Award, ArrowRight } from 'lucide-react';
+import { Users, Target, Heart, Globe2, Award, ArrowRight, Code, Palette, Server, Smartphone } from 'lucide-react';
 
-const team = [
-  { name: 'Sarah Johnson', role: 'Founder & CEO', image: 'https://i.pravatar.cc/150?img=1' },
-  { name: 'Mike Chen', role: 'CTO', image: 'https://i.pravatar.cc/150?img=2' },
-  { name: 'Emma Wilson', role: 'Head of Design', image: 'https://i.pravatar.cc/150?img=3' },
-  { name: 'James Martinez', role: 'Head of Community', image: 'https://i.pravatar.cc/150?img=4' }
+const devTeam = [
+  { name: 'Wanjiru Kamau', role: 'Founder & CEO', image: 'https://i.pravatar.cc/150?img=5', icon: Users },
+  { name: 'Omondi Okello', role: 'CTO', image: 'https://i.pravatar.cc/150?img=11', icon: Server },
+  { name: 'Achieng Odhiambo', role: 'Head of Design', image: 'https://i.pravatar.cc/150?img=9', icon: Palette },
+  { name: 'Kipchoge Kiprop', role: 'Lead Developer', image: 'https://i.pravatar.cc/150?img=13', icon: Code },
+  { name: 'Njeri Mwangi', role: 'Mobile Lead', image: 'https://i.pravatar.cc/150?img=10', icon: Smartphone },
+  { name: 'Mutua Kimani', role: 'Head of Community', image: 'https://i.pravatar.cc/150?img=12', icon: Heart }
 ];
 
 const values = [
@@ -128,32 +130,105 @@ export default function About() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-3xl font-bold mb-12 text-center text-white"
+            className="text-3xl font-bold mb-4 text-center text-white"
           >
-            Meet Our Team
+            Meet Our Development Team
           </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-dark-400 text-center max-w-2xl mx-auto mb-12"
+          >
+            Proudly built in Kenya 🇰🇪 by a talented team of developers, designers, and innovators
+          </motion.p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {team.map((member, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="text-center group"
-              >
-                <div className="relative h-48 rounded-2xl overflow-hidden mb-4">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-dark-900 via-transparent to-transparent" />
-                </div>
-                <h3 className="text-lg font-bold text-white">{member.name}</h3>
-                <p className="text-primary-400">{member.role}</p>
-              </motion.div>
-            ))}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {devTeam.map((member, i) => {
+              const Icon = member.icon;
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: i * 0.1 }}
+                  className="text-center group bg-dark-800/50 rounded-2xl p-6 border border-dark-700 hover:border-primary-500/50 transition-all"
+                >
+                  <div className="relative h-48 rounded-2xl overflow-hidden mb-4 mx-auto max-w-xs">
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-dark-900 via-transparent to-transparent" />
+                  </div>
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <Icon className="w-4 h-4 text-primary-400" />
+                    <h3 className="text-lg font-bold text-white">{member.name}</h3>
+                  </div>
+                  <p className="text-primary-400">{member.role}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Kenya Roots Section */}
+      <section className="py-20 border-b border-dark-700 bg-gradient-to-br from-green-900/20 via-black-900/20 to-red-900/20">
+        <div className="page-container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl font-bold mb-4 text-white">🇰🇪 Proudly Kenyan</h2>
+            <p className="text-xl text-dark-400 max-w-3xl mx-auto">
+              Born in Nairobi, built for the world. We're a Kenyan tech company bringing
+              African innovation to the global travel industry.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-center p-6 rounded-2xl bg-dark-800/50 border border-dark-700"
+            >
+              <div className="text-4xl mb-4">🏙️</div>
+              <h3 className="text-xl font-bold text-white mb-2">Nairobi HQ</h3>
+              <p className="text-dark-400">
+                Operating from Silicon Savannah, Nairobi's thriving tech hub
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-center p-6 rounded-2xl bg-dark-800/50 border border-dark-700"
+            >
+              <div className="text-4xl mb-4">👥</div>
+              <h3 className="text-xl font-bold text-white mb-2">Local Talent</h3>
+              <p className="text-dark-400">
+                Empowering Kenyan developers, designers, and content creators
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="text-center p-6 rounded-2xl bg-dark-800/50 border border-dark-700"
+            >
+              <div className="text-4xl mb-4">🌍</div>
+              <h3 className="text-xl font-bold text-white mb-2">Global Reach</h3>
+              <p className="text-dark-400">
+                Showcasing Kenya's beauty while connecting the world virtually
+              </p>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -172,11 +247,11 @@ export default function About() {
 
           <div className="max-w-2xl mx-auto space-y-8">
             {[
-              { year: '2020', title: 'Founded', description: 'Virtual Tourist is launched with vision to democratize travel' },
-              { year: '2021', title: '10K Users', description: 'Reached 10,000 active users and expanded tour library' },
-              { year: '2022', title: 'Series A Funding', description: 'Raised $5M in Series A to accelerate platform development' },
-              { year: '2023', title: '100K Users', description: 'Milestone of 100,000 users exploring virtually worldwide' },
-              { year: '2024', title: 'Global Expansion', description: 'Expanded to 50+ countries with localized content and guides' }
+              { year: '2020', title: 'Founded in Nairobi', description: 'Virtual Tourist launched from Nairobi, Kenya with vision to democratize travel' },
+              { year: '2021', title: '10K Users', description: 'Reached 10,000 active users and expanded tour library with African destinations' },
+              { year: '2022', title: 'Series A Funding', description: 'Raised $5M in Series A to accelerate platform development and hire local talent' },
+              { year: '2023', title: '100K Users', description: 'Milestone of 100,000 users exploring virtually worldwide, showcasing Kenya\'s beauty' },
+              { year: '2024', title: 'Global Expansion', description: 'Expanded to 50+ countries with localized content, proudly flying the Kenyan flag' }
             ].map((milestone, i) => (
               <motion.div
                 key={i}

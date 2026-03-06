@@ -1,11 +1,19 @@
-# Deployment Guide
+# Deployment Guide - Virtual Tourist (2026)
 
 ## 🌐 Complete Deployment Options
 
 This guide covers all deployment options for Virtual Tourist:
-- **Frontend**: Netlify, Render, GitHub Pages, Vercel
-- **Backend**: Render, Railway, Heroku
+- **Frontend**: Netlify, Render, GitHub Pages, Vercel, Docker
+- **Backend**: Render, Railway, Heroku, Docker
 - **Database**: MongoDB Atlas (Primary) + MongoDB Compass (Fallback)
+- **Full Stack**: Docker Compose, Kubernetes
+
+**Latest Updates:**
+- ✅ All API endpoints verified and documented
+- ✅ Enhanced dashboards with real-time analytics
+- ✅ Package dependencies synchronized
+- ✅ WebSocket support for live features
+- ✅ Rate limiting and security hardening
 
 ---
 
@@ -17,6 +25,241 @@ This guide covers all deployment options for Virtual Tourist:
 4. [Database Setup](#database-setup)
 5. [Environment Variables](#environment-variables)
 6. [CI/CD Setup](#cicd-setup)
+7. [Docker Deployment](#docker-deployment)
+8. [API Endpoints Reference](#api-endpoints-reference)
+
+---
+
+## 🐳 Docker Deployment {#docker-deployment}
+
+### Docker Compose (Recommended for Local/Testing)
+
+#### Quick Start
+```bash
+# Start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+```
+
+#### Services Included
+- **MongoDB**: Port 27017
+- **Backend API**: Port 5000
+- **Frontend**: Port 3000
+- **Nginx**: Port 80/443 (production)
+
+#### Environment Configuration
+Create `.env` file in root:
+```env
+# MongoDB
+MONGO_INITDB_ROOT_USERNAME=admin
+MONGO_INITDB_ROOT_PASSWORD=admin123
+MONGO_INITDB_DATABASE=virtual-tourist
+
+# Backend
+NODE_ENV=production
+PORT=5000
+MONGODB_URI=mongodb://admin:admin123@mongodb:27017/virtual-tourist?authSource=admin
+JWT_SECRET=your-super-secret-jwt-key
+CLIENT_URL=http://localhost:3000
+
+# Frontend
+VITE_API_URL=http://localhost:5000/api
+```
+
+### Production Docker Deployment
+
+#### Build Images
+```bash
+# Build all images
+docker-compose build
+
+# Build specific service
+docker-compose build server
+docker-compose build client
+```
+
+#### Deploy with Nginx (Production)
+```bash
+# Start with nginx profile
+docker-compose --profile production up -d
+
+# Access at http://localhost
+```
+
+#### Kubernetes Deployment (Advanced)
+
+Create `k8s/` directory:
+
+**mongodb-deployment.yaml**
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:7
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: mongodb-data
+          mountPath: /data/db
+      volumes:
+      - name: mongodb-data
+        persistentVolumeClaim:
+          claimName: mongodb-pvc
+```
+
+**backend-deployment.yaml**
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: your-registry/virtual-tourist-server:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGODB_URI
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: mongodb-uri
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: jwt-secret
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+```
+
+**frontend-deployment.yaml**
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: your-registry/virtual-tourist-client:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+```
+
+**Apply Configuration**
+```bash
+kubectl apply -f k8s/
+kubectl get pods
+kubectl get services
+```
+
+---
+
+## 🔗 API Endpoints Reference {#api-endpoints-reference}
+
+For complete API documentation, see [API_ENDPOINTS.md](./API_ENDPOINTS.md)
+
+### Quick Reference
+
+#### Authentication
+- `POST /api/auth/register` - Register user
+- `POST /api/auth/login` - Login user
+- `GET /api/auth/me` - Get current user
+
+#### Tours
+- `GET /api/tours` - Get all tours
+- `GET /api/tours/:id` - Get tour by ID
+- `POST /api/tours` - Create tour (Admin)
+- `PUT /api/tours/:id` - Update tour (Admin)
+- `DELETE /api/tours/:id` - Delete tour (Admin)
+
+#### Destinations
+- `GET /api/destinations` - Get all destinations
+- `GET /api/destinations/:id` - Get destination by ID
+- `POST /api/destinations` - Create destination (Admin)
+
+#### Bookings
+- `POST /api/bookings` - Create booking
+- `GET /api/bookings` - Get user bookings
+- `PUT /api/bookings/:id/cancel` - Cancel booking
+
+#### Social Features
+- `POST /api/social/follow/:userId` - Follow user
+- `GET /api/social/feed` - Get personalized feed
+- `POST /api/social/comments/:tourId` - Add comment
+
+#### Recommendations
+- `GET /api/recommendations/personal` - Get personalized recommendations
+- `GET /api/recommendations/trending` - Get trending tours
+
+#### Admin
+- `GET /api/admin/stats` - Get dashboard stats
+- `POST /api/admin/backup` - Create backup
+- `GET /api/admin/audit-logs` - Get audit logs
+
+### Health Check
+```bash
+curl https://your-backend.onrender.com/api/health
+```
+
+Response:
+```json
+{
+  "status": "OK",
+  "timestamp": "2026-03-06T12:00:00.000Z",
+  "uptime": 12345.67
+}
+```
 
 ---
 

@@ -3,12 +3,19 @@ import User from '../models/User.js';
 import sendEmail from '../utils/sendEmail.js';
 import webpush from 'web-push';
 
-// Configure web push
-webpush.setVapidDetails(
-  'mailto:hello@virtualtourist.com',
-  process.env.VAPID_PUBLIC_KEY,
-  process.env.VAPID_PRIVATE_KEY
-);
+// Lazy initialization for web push VAPID keys
+let vapidInitialized = false;
+
+function initVapid() {
+  if (!vapidInitialized && process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
+    webpush.setVapidDetails(
+      'mailto:hello@virtualtourist.com',
+      process.env.VAPID_PUBLIC_KEY,
+      process.env.VAPID_PRIVATE_KEY
+    );
+    vapidInitialized = true;
+  }
+}
 
 class NotificationService {
   /**
@@ -60,6 +67,7 @@ class NotificationService {
     // Send push notification if subscription exists
     if (user?.pushSubscription) {
       try {
+        initVapid();
         await webpush.sendNotification(
           user.pushSubscription,
           JSON.stringify({

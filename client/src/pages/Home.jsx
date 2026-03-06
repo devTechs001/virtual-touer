@@ -24,18 +24,28 @@ import { useFeaturedTours, usePopularTours } from '../hooks/useTours';
 
 const heroSlides = [
   {
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920',
-    title: 'Explore the Alps',
-    subtitle: 'Switzerland'
+    image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1920',
+    title: 'Discover Kenya',
+    subtitle: 'Maasai Mara Magic'
   },
   {
-    image: 'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=1920',
-    title: 'Discover Venice',
-    subtitle: 'Italy'
+    image: 'https://images.unsplash.com/photo-1523805009345-7448845a9e53?w=1920',
+    title: 'Explore Diani Beach',
+    subtitle: 'Kenyan Coast'
   },
   {
-    image: 'https://images.unsplash.com/photo-1539768942893-daf53e448371?w=1920',
-    title: 'Ancient Wonders',
+    image: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=1920',
+    title: 'Mount Kenya',
+    subtitle: 'Africa\'s Second Highest Peak'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1920',
+    title: 'Serengeti Safari',
+    subtitle: 'Tanzania'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1534764878489-4b832442c3e7?w=1920',
+    title: 'Pyramids of Giza',
     subtitle: 'Egypt'
   }
 ];
@@ -43,18 +53,18 @@ const heroSlides = [
 const features = [
   {
     icon: Globe2,
-    title: '360° Virtual Tours',
-    description: 'Immerse yourself in stunning panoramic views from anywhere in the world.'
+    title: 'Africa-First Tours',
+    description: 'Starting with Kenya\'s wonders, explore East Africa\'s beauty and beyond.'
   },
   {
     icon: Compass,
-    title: 'AR Navigation',
-    description: 'Experience destinations with augmented reality guides and information.'
+    title: 'Wildlife Safari 360°',
+    description: 'Experience the Great Migration and Big Five in immersive virtual reality.'
   },
   {
     icon: Camera,
-    title: 'Live Experiences',
-    description: 'Join live-guided tours with local experts in real-time.'
+    title: 'Live African Guides',
+    description: 'Join live-guided tours with local Maasai, Swahili, and African experts.'
   }
 ];
 
@@ -170,8 +180,8 @@ const Home = () => {
             transition={{ duration: 0.8, delay: 1 }}
             className="flex flex-wrap items-center justify-center gap-3 mt-8"
           >
-            <span className="text-dark-500 text-sm">Popular:</span>
-            {['Paris', 'Tokyo', 'New York', 'Bali'].map((place) => (
+            <span className="text-dark-500 text-sm">Explore Africa:</span>
+            {['Maasai Mara', 'Diani Beach', 'Mount Kenya', 'Serengeti', 'Zanzibar', 'Pyramids'].map((place) => (
               <Link
                 key={place}
                 to={`/explore?q=${place}`}

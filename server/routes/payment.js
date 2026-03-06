@@ -9,7 +9,7 @@ import {
   getPaymentMethods,
   addPaymentMethod,
   removePaymentMethod
-} from '../controllers/payment.controller.js';
+} from '../controllers/payment.js';
 
 const router = express.Router();
 

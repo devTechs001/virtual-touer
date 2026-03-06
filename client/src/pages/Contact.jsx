@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Mail, Phone, MapPin, Send, ExternalLink, MessageSquare } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, ExternalLink, MessageSquare, Clock, Globe2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const contactSchema = z.object({
@@ -16,28 +16,86 @@ const contactMethods = [
   {
     icon: Mail,
     title: 'Email',
-    value: 'hello@vtourist.com',
+    value: 'hello@virtualtourist.co.ke',
     description: 'We reply within 24 hours'
   },
   {
     icon: Phone,
-    title: 'Phone',
+    title: 'Phone (Kenya)',
+    value: '+254 700 123 456',
+    description: 'Mon-Sat, 8am-6pm EAT'
+  },
+  {
+    icon: Phone,
+    title: 'Phone (US)',
     value: '+1 (555) 123-4567',
-    description: 'Mon-Fri, 9am-6pm EST'
+    description: 'Mon-Fri, 9am-5pm EST'
   },
   {
     icon: MapPin,
-    title: 'Office',
-    value: 'San Francisco, CA',
-    description: '123 Travel Street, Suite 100'
+    title: 'Nairobi HQ',
+    value: 'Westlands, Nairobi',
+    description: 'Silicon Savannah, Kenya'
+  },
+  {
+    icon: Clock,
+    title: 'Business Hours',
+    value: 'EAT (UTC+3)',
+    description: 'East Africa Time'
+  },
+  {
+    icon: Globe2,
+    title: 'Global Support',
+    value: '24/7 Online',
+    description: 'Chat support available'
   }
 ];
 
 const socialLinks = [
-  { name: 'Twitter', url: 'https://twitter.com' },
-  { name: 'Facebook', url: 'https://facebook.com' },
-  { name: 'Instagram', url: 'https://instagram.com' },
-  { name: 'LinkedIn', url: 'https://linkedin.com' }
+  { name: 'Twitter', url: 'https://twitter.com/virtualtourist' },
+  { name: 'Facebook', url: 'https://facebook.com/virtualtourist' },
+  { name: 'Instagram', url: 'https://instagram.com/virtualtourist' },
+  { name: 'LinkedIn', url: 'https://linkedin.com/company/virtualtourist' },
+  { name: 'TikTok', url: 'https://tiktok.com/@virtualtourist' }
+];
+
+const regionalOffices = [
+  {
+    region: '🇰🇪 Kenya (HQ)',
+    address: 'Westlands Business Park, Nairobi',
+    phone: '+254 700 123 456',
+    email: 'kenya@virtualtourist.co.ke'
+  },
+  {
+    region: '🇹🇿 Tanzania',
+    address: 'Upanga Road, Dar es Salaam',
+    phone: '+255 22 123 4567',
+    email: 'tanzania@virtualtourist.co.tz'
+  },
+  {
+    region: '🇺🇬 Uganda',
+    address: 'Kampala Road, Kampala',
+    phone: '+256 41 123 4567',
+    email: 'uganda@virtualtourist.co.ug'
+  },
+  {
+    region: '🇷🇼 Rwanda',
+    address: 'KN 3 Avenue, Kigali',
+    phone: '+250 252 123 456',
+    email: 'rwanda@virtualtourist.co.rw'
+  },
+  {
+    region: '🇿🇦 South Africa',
+    address: 'Sandton, Johannesburg',
+    phone: '+27 11 123 4567',
+    email: 'southafrica@virtualtourist.co.za'
+  },
+  {
+    region: '🇺🇸 United States',
+    address: '123 Tech Avenue, San Francisco, CA',
+    phone: '+1 (555) 123-4567',
+    email: 'usa@virtualtourist.com'
+  }
 ];
 
 export default function Contact() {
@@ -192,6 +250,96 @@ export default function Contact() {
               </button>
             </form>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Regional Offices */}
+      <section className="py-20 border-b border-dark-700">
+        <div className="page-container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl font-bold mb-4 text-white">🌍 Our Regional Offices</h2>
+            <p className="text-dark-400 max-w-2xl mx-auto">
+              Headquartered in Nairobi, with offices across East Africa and beyond
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {regionalOffices.map((office, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: i * 0.05 }}
+                className={`p-6 rounded-2xl bg-dark-800/50 border border-dark-700 hover:border-primary-500/50 transition-all ${
+                  i === 0 ? 'lg:col-span-2 border-primary-500/30 bg-primary-500/5' : ''
+                }`}
+              >
+                <h3 className="text-lg font-bold text-white mb-3">{office.region}</h3>
+                <div className="space-y-2 text-dark-400 text-sm">
+                  <p className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-primary-400" />
+                    {office.address}
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-primary-400" />
+                    {office.phone}
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-primary-400" />
+                    {office.email}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Africa-First Features */}
+      <section className="py-20 border-b border-dark-700 bg-gradient-to-br from-green-900/10 via-black-900/10 to-red-900/10">
+        <div className="page-container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl font-bold mb-4 text-white">🇰🇪 Africa-First Platform</h2>
+            <p className="text-dark-400 max-w-2xl mx-auto">
+              Proudly African, we showcase the beauty and diversity of our continent first
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-4 gap-6">
+            {[
+              { flag: '🇰🇪', name: 'Kenya', tours: '50+ tours', highlight: 'Maasai Mara, Diani Beach' },
+              { flag: '🇹🇿', name: 'Tanzania', tours: '40+ tours', highlight: 'Serengeti, Zanzibar' },
+              { flag: '🇺🇬', name: 'Uganda', tours: '30+ tours', highlight: 'Gorillas, Nile' },
+              { flag: '🇷🇼', name: 'Rwanda', tours: '25+ tours', highlight: 'Volcanoes, Kigali' },
+              { flag: '🇿🇦', name: 'South Africa', tours: '45+ tours', highlight: 'Cape Town, Safari' },
+              { flag: '🇪🇹', name: 'Ethiopia', tours: '20+ tours', highlight: 'Lalibela, Axum' },
+              { flag: '🇲🇦', name: 'Morocco', tours: '35+ tours', highlight: 'Marrakech, Sahara' },
+              { flag: '🇪🇬', name: 'Egypt', tours: '40+ tours', highlight: 'Pyramids, Luxor' }
+            ].map((country, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
+                className="text-center p-4 rounded-xl bg-dark-800/50 border border-dark-700 hover:border-primary-500/50 transition-all"
+              >
+                <span className="text-4xl mb-2 block">{country.flag}</span>
+                <h3 className="font-bold text-white">{country.name}</h3>
+                <p className="text-primary-400 text-sm">{country.tours}</p>
+                <p className="text-dark-500 text-xs mt-2">{country.highlight}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 

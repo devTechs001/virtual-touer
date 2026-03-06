@@ -30,10 +30,20 @@ class DatabaseManager {
    * Get connection string based on environment and availability
    */
   getConnectionStrings() {
+    const atlasUri = process.env.ATLAS_URI || process.env.MONGODB_URI;
+    // Skip Atlas if URI is empty, undefined, or contains placeholder values
+    const isValidAtlas = atlasUri &&
+      atlasUri.trim() &&
+      !atlasUri.includes('<username>') &&
+      !atlasUri.includes('<password>') &&
+      !atlasUri.includes('<cluster>') &&
+      !atlasUri.startsWith('mongodb://127.0.0.1') &&
+      !atlasUri.startsWith('mongodb://localhost:');
+
     return {
-      atlas: process.env.ATLAS_URI,
+      atlas: isValidAtlas ? atlasUri : null,
       docker: process.env.MONGODB_URI_DOCKER || 'mongodb://admin:admin123@localhost:27017/virtual-tourist?authSource=admin',
-      local: process.env.MONGODB_URI || process.env.MONGODB_URI_LOCAL || 'mongodb://localhost:27017/virtual-tourist'
+      local: process.env.MONGODB_URI_LOCAL || process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/virtual-tourist'
     };
   }
 
@@ -110,11 +120,32 @@ class DatabaseManager {
   async connectToLocal(uris) {
     console.log('🏠 Attempting local MongoDB connection...');
 
-    // Try Docker MongoDB first
+    // Try simple local MongoDB first (no auth - common for local dev)
+    const simpleLocal = 'mongodb://127.0.0.1:27017/virtual-tourist';
+    if (simpleLocal !== uris.docker && simpleLocal !== uris.local) {
+      console.log('   Trying local MongoDB (no auth)...');
+      const simpleResult = await this.testConnection(simpleLocal);
+
+      if (simpleResult.success) {
+        this.connection = simpleResult.connection;
+        this.isConnected = true;
+        this.connectionMode = 'local';
+        this.startHealthCheck();
+        console.log('✅ Connected to Local MongoDB');
+        console.log(`   Host: ${this.connection.host}`);
+        console.log(`   Database: ${this.connection.name}`);
+        console.log('');
+        console.log('📝 Running in development mode with MongoDB (no auth)');
+        console.log('');
+        return this.connection;
+      }
+    }
+
+    // Try Docker MongoDB next
     if (uris.docker) {
       console.log('   Trying Docker MongoDB...');
       const dockerResult = await this.testConnection(uris.docker);
-      
+
       if (dockerResult.success) {
         this.connection = dockerResult.connection;
         this.isConnected = true;
@@ -134,7 +165,7 @@ class DatabaseManager {
     if (uris.local) {
       console.log('   Trying local MongoDB (Compass)...');
       const localResult = await this.testConnection(uris.local);
-      
+
       if (localResult.success) {
         this.connection = localResult.connection;
         this.isConnected = true;

@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -6,7 +9,6 @@ import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import dotenv from 'dotenv';
 
 // Database import
 import connectDB from './config/db.js';
@@ -21,6 +23,10 @@ import reviewRoutes from './routes/reviewRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import systemRoutes from './routes/system.routes.js';
 import logsRoutes from './routes/logs.routes.js';
+import socialRoutes from './routes/socialRoutes.js';
+import recommendationRoutes from './routes/recommendationRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
+import paymentRoutes from './routes/payment.js';
 
 // Middleware imports
 import { errorHandler } from './middleware/error.js';
@@ -28,15 +34,13 @@ import { notFound } from './middleware/notFound.js';
 import auditLogger from './middleware/auditLogger.js';
 import adminRoutes from './routes/adminRoutes.js';
 
-dotenv.config();
-
 // (connectDB will be called after httpServer is created further down)
 
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    origin: process.env.CLIENT_URL || ['http://localhost:3000', 'http://localhost:5173'],
     methods: ['GET', 'POST']
   }
 });
@@ -76,7 +80,7 @@ const authLimiter = rateLimit({
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: process.env.CLIENT_URL || ['http://localhost:3000', 'http://localhost:5173'],
   credentials: true
 }));
 app.use(compression());
@@ -108,6 +112,10 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/system', systemRoutes);
 app.use('/api/logs', logsRoutes);
+app.use('/api/social', socialRoutes);
+app.use('/api/recommendations', recommendationRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/payments', paymentRoutes);
 // Admin endpoints for backups, api-keys, webhooks, audit logs, seeding
 app.use('/api/admin', adminRoutes);
 

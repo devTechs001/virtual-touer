@@ -14,7 +14,7 @@ import {
   shareTour,
   getShareStats,
   getFeed
-} from '../controllers/social.controller.js';
+} from '../controllers/socialControllers.js';
 
 const router = express.Router();
 
