@@ -56,19 +56,47 @@ const UserDashboard = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [searchParams] = useSearchParams();
 
-  const { data: dashboardData, isLoading } = useQuery({
+  const { data: dashboardData, isLoading, error } = useQuery({
     queryKey: ['user', 'dashboard'],
-    queryFn: () => userService.getDashboard().then(res => res.data)
+    queryFn: async () => {
+      try {
+        const response = await userService.getDashboard();
+        return response.data.data;
+      } catch (err) {
+        console.error('Dashboard fetch error:', err);
+        throw err; // Re-throw to let React Query handle it
+      }
+    },
+    retry: 1,
+    staleTime: 5 * 60 * 1000
   });
 
-  const { data: achievements } = useQuery({
+  const { data: achievements, error: achievementsError } = useQuery({
     queryKey: ['user', 'achievements'],
-    queryFn: () => userService.getAchievements().then(res => res.data)
+    queryFn: async () => {
+      try {
+        const response = await userService.getAchievements();
+        return response.data.data;
+      } catch (err) {
+        console.error('Achievements fetch error:', err);
+        return { achievements: [], totalPoints: 0, level: 'Explorer' };
+      }
+    },
+    retry: 1
   });
 
-  const { data: recommendations } = useQuery({
+  const { data: recommendations, error: recommendationsError } = useQuery({
     queryKey: ['user', 'recommendations'],
-    queryFn: () => userService.getRecommendations().then(res => res.data)
+    queryFn: async () => {
+      try {
+        const response = await userService.getRecommendations();
+        return response.data.data;
+      } catch (err) {
+        console.error('Recommendations fetch error:', err);
+        return { tours: [] };
+      }
+    },
+    retry: 1
   });
 
   const stats = dashboardData?.stats || {
@@ -118,19 +146,69 @@ const UserDashboard = () => {
   // Get active tab from URL params
   const tabFromUrl = searchParams.get('tab');
 
+  // Show error state
+  if (error) {
+    const isAuthError = error.response?.status === 401;
+    return (
+      <div className="min-h-screen bg-dark-900 flex items-center justify-center">
+        <div className="text-center max-w-md px-4">
+          <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
+            <AlertCircle className="w-8 h-8 text-red-400" />
+          </div>
+          <h2 className="text-2xl font-bold text-white mb-2">
+            {isAuthError ? 'Authentication Required' : 'Error Loading Dashboard'}
+          </h2>
+          <p className="text-dark-400 mb-6">
+            {isAuthError
+              ? 'Please log in to view your dashboard'
+              : 'Something went wrong. Please try again later.'}
+          </p>
+          {isAuthError ? (
+            <a
+              href="/login"
+              className="inline-flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-medium transition-colors"
+            >
+              Go to Login
+            </a>
+          ) : (
+            <button
+              onClick={() => window.location.reload()}
+              className="inline-flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-medium transition-colors"
+            >
+              Refresh Page
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-dark-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white text-lg">Loading your dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-dark-900">
+    <div className="min-h-screen bg-dark-900 relative">
       {/* Side Navigation */}
       <UserSidebar
         collapsed={sidebarCollapsed}
         setCollapsed={setSidebarCollapsed}
       />
 
-      {/* Main Content Area */}
+      {/* Main Content Area - positioned below NavBar (z-50) */}
       <main
-        className={`transition-all duration-300 pt-20 pb-20 lg:pb-8 ${
+        className={`relative transition-all duration-300 pt-20 pb-20 lg:pb-8 ${
           sidebarCollapsed ? 'lg:ml-20' : 'lg:ml-[280px]'
         }`}
+        style={{ zIndex: 1 }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Header */}

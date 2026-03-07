@@ -52,7 +52,7 @@ class DatabaseManager {
    */
   async testConnection(uri, timeout = 5000) {
     try {
-      const conn = await mongoose.createConnection(uri, {
+      const conn = await mongoose.connect(uri, {
         serverSelectionTimeoutMS: timeout,
         socketTimeoutMS: 45000,
         maxPoolSize: 10,
@@ -60,9 +60,9 @@ class DatabaseManager {
         maxIdleTimeMS: 30000,
         retryWrites: true,
         w: 'majority'
-      }).asPromise();
+      });
 
-      await conn.db.command({ ping: 1 });
+      await conn.connection.db.command({ ping: 1 });
       return { success: true, connection: conn };
     } catch (error) {
       return { success: false, error: error.message };
@@ -91,7 +91,7 @@ class DatabaseManager {
       const result = await this.testConnection(uris.atlas);
 
       if (result.success) {
-        this.connection = result.connection;
+        this.connection = mongoose.connection;
         this.isConnected = true;
         this.connectionMode = 'atlas';
         this.startHealthCheck();
@@ -127,7 +127,7 @@ class DatabaseManager {
       const simpleResult = await this.testConnection(simpleLocal);
 
       if (simpleResult.success) {
-        this.connection = simpleResult.connection;
+        this.connection = mongoose.connection;
         this.isConnected = true;
         this.connectionMode = 'local';
         this.startHealthCheck();
@@ -147,7 +147,7 @@ class DatabaseManager {
       const dockerResult = await this.testConnection(uris.docker);
 
       if (dockerResult.success) {
-        this.connection = dockerResult.connection;
+        this.connection = mongoose.connection;
         this.isConnected = true;
         this.connectionMode = 'docker';
         this.startHealthCheck();
@@ -167,7 +167,7 @@ class DatabaseManager {
       const localResult = await this.testConnection(uris.local);
 
       if (localResult.success) {
-        this.connection = localResult.connection;
+        this.connection = mongoose.connection;
         this.isConnected = true;
         this.connectionMode = 'local';
         this.startHealthCheck();
@@ -226,12 +226,10 @@ class DatabaseManager {
   startHealthCheck() {
     this.healthCheckInterval = setInterval(async () => {
       try {
-        if (this.connection) {
-          await this.connection.db.command({ ping: 1 });
-          if (!this.isConnected) {
-            console.log('✅ Database connection restored');
-            this.isConnected = true;
-          }
+        await mongoose.connection.db.command({ ping: 1 });
+        if (!this.isConnected) {
+          console.log('✅ Database connection restored');
+          this.isConnected = true;
         }
       } catch (error) {
         console.warn('⚠️  Database health check failed:', error.message);
@@ -282,10 +280,8 @@ class DatabaseManager {
       clearInterval(this.healthCheckInterval);
     }
 
-    if (this.connection) {
-      await this.connection.close();
-      console.log('👋 Database connection closed');
-    }
+    await mongoose.disconnect();
+    console.log('👋 Database connection closed');
 
     this.isConnected = false;
     this.connection = null;

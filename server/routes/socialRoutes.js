@@ -39,4 +39,11 @@ router.get('/share/:tourId/stats', getShareStats);
 // Feed
 router.get('/feed', protect, getFeed);
 
+// User follow (alternative paths for client compatibility)
+router.post('/users/:userId/follow', protect, followUser);
+router.delete('/users/:userId/follow', protect, unfollowUser);
+router.get('/users/:userId/followers', getFollowers);
+router.get('/users/:userId/following', getFollowing);
+router.get('/users/:userId/follow/check', protect, checkFollowing);
+
 export default router;

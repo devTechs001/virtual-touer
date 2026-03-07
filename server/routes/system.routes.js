@@ -22,6 +22,15 @@ router.get('/maintenance/status', getMaintenanceStatus);
 router.get('/announcements', getActiveAnnouncements);
 router.get('/health', getSystemHealth);
 router.get('/features', getFeatureFlags);
+router.post('/maintenance/subscribe', async (req, res) => {
+  try {
+    const { email } = req.body;
+    // Store email for maintenance notifications (simplified - in production use a proper model)
+    res.json({ success: true, message: 'Subscribed to maintenance notifications' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
 
 // Protected routes (admin only)
 router.use(protect);

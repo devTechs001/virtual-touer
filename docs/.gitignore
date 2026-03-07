@@ -1,0 +1,25 @@
+# ============================================
+# DOCS FOLDER .GITIGNORE
+# ============================================
+# Only keep main documentation index
+# All other docs are ignored by default
+# ============================================
+
+# Ignore all markdown files by default
+*.md
+
+# Allow only the main index file
+!INDEX.md
+
+# Allow README if it exists
+!README.md
+
+# Keep this gitignore
+!.gitignore
+
+# Ignore all subdirectories
+*/
+
+# ============================================
+# END OF GITIGNORE
+# ============================================

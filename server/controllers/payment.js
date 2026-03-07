@@ -406,3 +406,26 @@ export const removePaymentMethod = asyncHandler(async (req, res) => {
 
   res.json({ success: true, message: 'Payment method removed' });
 });
+
+// @desc    Get payment status
+// @route   GET /api/payments/:paymentId/status
+export const getPaymentStatus = asyncHandler(async (req, res) => {
+  const { paymentId } = req.params;
+
+  try {
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentId);
+
+    res.json({
+      success: true,
+      data: {
+        id: paymentIntent.id,
+        status: paymentIntent.status,
+        amount: paymentIntent.amount,
+        currency: paymentIntent.currency,
+        created: paymentIntent.created
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});

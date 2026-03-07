@@ -44,12 +44,13 @@ const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState(null);
 
-  const { data: favoritesData, isLoading: favoritesLoading } = useFavorites();
+  const { data: favoritesData, isLoading: favoritesLoading, error: favoritesError } = useFavorites();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
+    reset
   } = useForm({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -58,6 +59,18 @@ const Profile = () => {
       bio: user?.bio || ''
     }
   });
+
+  // Show loading state
+  if (favoritesLoading && activeTab === 'favorites') {
+    return (
+      <div className="min-h-screen bg-dark-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white text-lg">Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
 
   const onSubmit = async (data) => {
     const result = await updateProfile(data);

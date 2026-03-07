@@ -122,12 +122,12 @@ export const useAdminActions = () => {
 export const useStatsComparison = () => {
   const { data: adminStats } = useQuery({
     queryKey: ['admin', 'stats'],
-    queryFn: () => adminService.getStats().then(res => res.data)
+    queryFn: () => adminService.getStats().then(res => res.data.data)
   });
 
   const { data: userData } = useQuery({
     queryKey: ['user', 'dashboard'],
-    queryFn: () => userService.getDashboard().then(res => res.data)
+    queryFn: () => userService.getDashboard().then(res => res.data.data)
   });
 
   const comparison = {

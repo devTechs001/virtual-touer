@@ -27,6 +27,7 @@ import socialRoutes from './routes/socialRoutes.js';
 import recommendationRoutes from './routes/recommendationRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
 import paymentRoutes from './routes/payment.js';
+import userRoutes from './routes/userRoutes.js';
 
 // Middleware imports
 import { errorHandler } from './middleware/error.js';
@@ -116,6 +117,7 @@ app.use('/api/social', socialRoutes);
 app.use('/api/recommendations', recommendationRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/users', userRoutes);
 // Admin endpoints for backups, api-keys, webhooks, audit logs, seeding
 app.use('/api/admin', adminRoutes);
 

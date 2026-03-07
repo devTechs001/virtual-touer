@@ -3,6 +3,10 @@ import ApiKey from '../models/ApiKey.js';
 import Webhook from '../models/Webhook.js';
 import AuditLog from '../models/AuditLog.js';
 import Destination from '../models/Destination.js';
+import Tour from '../models/Tour.js';
+import User from '../models/User.js';
+import Booking from '../models/Booking.js';
+import Review from '../models/Review.js';
 import { backupCollections, restoreCollections } from '../utils/backup.js';
 import crypto from 'crypto';
 
@@ -14,6 +18,229 @@ function requireAdmin(req, res, next) {
   if (req.user && req.user.isAdmin) return next();
   return res.status(401).json({ success: false, message: 'Unauthorized' });
 }
+
+// Admin Dashboard Stats
+router.get('/stats', async (req, res) => {
+  try {
+    const [
+      totalUsers,
+      totalTours,
+      totalBookings,
+      totalRevenue,
+      totalReviews,
+      recentBookings,
+      topTours
+    ] = await Promise.all([
+      User.countDocuments(),
+      Tour.countDocuments(),
+      Booking.countDocuments(),
+      Booking.aggregate([
+        { $match: { status: 'completed' } },
+        { $group: { _id: null, total: { $sum: '$totalPrice' } } }
+      ]),
+      Review.countDocuments(),
+      Booking.find().sort({ createdAt: -1 }).limit(10).populate('user', 'name email').populate('tour', 'title location'),
+      Tour.aggregate([
+        { $lookup: { from: 'bookings', localField: '_id', foreignField: 'tour', as: 'bookings' } },
+        { $addFields: { bookingCount: { $size: '$bookings' } } },
+        { $sort: { bookingCount: -1 } },
+        { $limit: 5 }
+      ])
+    ]);
+
+    const revenue = totalRevenue[0]?.total || 0;
+
+    res.json({
+      success: true,
+      data: {
+        users: { total: totalUsers, change: 5 },
+        tours: { total: totalTours, change: 2 },
+        bookings: { total: totalBookings, change: 10 },
+        revenue: { total: revenue, change: 15 },
+        reviews: { total: totalReviews, change: 3 },
+        recentBookings,
+        topTours,
+        revenueChart: [],
+        userGrowthChart: [],
+        tourViewsChart: [],
+        geoData: []
+      }
+    });
+  } catch (error) {
+    console.error('Admin stats error:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// Admin Activity Feed
+router.get('/activity', async (req, res) => {
+  try {
+    const [recentBookings, recentReviews, recentUsers] = await Promise.all([
+      Booking.find().sort({ createdAt: -1 }).limit(5).populate('user', 'name').populate('tour', 'title'),
+      Review.find().sort({ createdAt: -1 }).limit(5).populate('user', 'name').populate('tour', 'title'),
+      User.find().sort({ createdAt: -1 }).limit(5)
+    ]);
+
+    const activities = [
+      ...recentBookings.map(b => ({
+        _id: b._id,
+        type: 'booking',
+        message: `${b.user?.name || 'User'} booked ${b.tour?.title || 'a tour'}`,
+        time: new Date(b.createdAt).toLocaleString()
+      })),
+      ...recentReviews.map(r => ({
+        _id: r._id,
+        type: 'review',
+        message: `${r.user?.name || 'User'} reviewed ${r.tour?.title || 'a tour'}`,
+        time: new Date(r.createdAt).toLocaleString()
+      })),
+      ...recentUsers.map(u => ({
+        _id: u._id,
+        type: 'user',
+        message: `${u.name} joined`,
+        time: new Date(u.createdAt).toLocaleString()
+      }))
+    ].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 10);
+
+    res.json({
+      success: true,
+      data: { activities }
+    });
+  } catch (error) {
+    console.error('Admin activity error:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// Admin Users management
+router.get('/users', async (req, res) => {
+  try {
+    const users = await User.find().select('-password').limit(50);
+    res.json({ success: true, data: users });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.get('/users/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select('-password');
+    res.json({ success: true, data: user });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.put('/users/:id', async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true }).select('-password');
+    res.json({ success: true, data: user });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.delete('/users/:id', async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: 'User deleted' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// Admin Tours management
+router.get('/tours', async (req, res) => {
+  try {
+    const tours = await Tour.find().populate('destination').limit(50);
+    res.json({ success: true, data: tours });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.get('/tours/:id', async (req, res) => {
+  try {
+    const tour = await Tour.findById(req.params.id).populate('destination');
+    res.json({ success: true, data: tour });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.post('/tours', async (req, res) => {
+  try {
+    const tour = await Tour.create(req.body);
+    res.json({ success: true, data: tour });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.put('/tours/:id', async (req, res) => {
+  try {
+    const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json({ success: true, data: tour });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.delete('/tours/:id', async (req, res) => {
+  try {
+    await Tour.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: 'Tour deleted' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// Admin Bookings management
+router.get('/bookings', async (req, res) => {
+  try {
+    const bookings = await Booking.find().populate('user').populate('tour').limit(50);
+    res.json({ success: true, data: bookings });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.put('/bookings/:id', async (req, res) => {
+  try {
+    const booking = await Booking.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json({ success: true, data: booking });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.delete('/bookings/:id', async (req, res) => {
+  try {
+    await Booking.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: 'Booking deleted' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// Admin Reviews management
+router.get('/reviews', async (req, res) => {
+  try {
+    const reviews = await Review.find().populate('user').populate('tour').limit(50);
+    res.json({ success: true, data: reviews });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.delete('/reviews/:id', async (req, res) => {
+  try {
+    await Review.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: 'Review deleted' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
 
 // API Key management
 router.post('/api-keys', requireAdmin, async (req, res) => {

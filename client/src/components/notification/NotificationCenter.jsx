@@ -1,14 +1,14 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Bell, 
-  Check, 
-  X, 
-  Trash2, 
-  Settings, 
-  AlertCircle, 
-  Info, 
-  CheckCircle, 
+import {
+  Bell,
+  Check,
+  X,
+  Trash2,
+  Settings,
+  AlertCircle,
+  Info,
+  CheckCircle,
   AlertTriangle,
   Clock,
   Calendar,
@@ -18,7 +18,8 @@ import {
   Star,
   MessageSquare,
   Filter,
-  Search
+  Search,
+  ChevronRight
 } from 'lucide-react';
 
 /**

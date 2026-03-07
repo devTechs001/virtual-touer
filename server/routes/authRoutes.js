@@ -9,7 +9,10 @@ import {
   forgotPassword,
   resetPassword,
   verifyEmail,
-  resendVerification
+  resendVerification,
+  getUserDashboard,
+  getUserAchievements,
+  getUserRecommendations
 } from '../controllers/authController.js';
 import { protect } from '../middleware/auth.js';
 import { validateRegister, validateLogin } from '../middleware/validatiors.js';
@@ -26,5 +29,10 @@ router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
 router.get('/verify/:token', verifyEmail);
 router.post('/resend-verification', protect, resendVerification);
+
+// User dashboard endpoints
+router.get('/dashboard', protect, getUserDashboard);
+router.get('/achievements', protect, getUserAchievements);
+router.get('/recommendations', protect, getUserRecommendations);
 
 export default router;

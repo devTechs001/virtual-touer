@@ -40,13 +40,13 @@ const AdminDashboard = () => {
 
   const { data: stats, isLoading } = useQuery({
     queryKey: ['admin', 'stats'],
-    queryFn: () => adminService.getStats().then(res => res.data),
+    queryFn: () => adminService.getStats().then(res => res.data.data),
     refetchInterval: 60000
   });
 
   const { data: recentActivity } = useQuery({
     queryKey: ['admin', 'activity'],
-    queryFn: () => adminService.getRecentActivity().then(res => res.data)
+    queryFn: () => adminService.getRecentActivity().then(res => res.data.data),
   });
 
   // Get comparison data showing admin impact on user dashboards

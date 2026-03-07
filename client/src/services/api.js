@@ -164,9 +164,9 @@ export const userService = {
   getFavorites: (userId) => api.get(`/users/${userId}/favorites`),
   getReviews: (userId) => api.get(`/users/${userId}/reviews`),
   getStats: (userId) => api.get(`/users/${userId}/stats`),
-  getDashboard: () => api.get('/users/dashboard'),
-  getAchievements: () => api.get('/users/achievements'),
-  getRecommendations: () => api.get('/users/recommendations'),
+  getDashboard: () => api.get('/auth/dashboard'),
+  getAchievements: () => api.get('/auth/achievements'),
+  getRecommendations: () => api.get('/auth/recommendations'),
   getContinueWatching: () => api.get('/users/continue-watching'),
   getRecentActivity: () => api.get('/users/activity')
 };

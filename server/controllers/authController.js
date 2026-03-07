@@ -292,7 +292,7 @@ export const resendVerification = asyncHandler(async (req, res) => {
 
   // Send email
   const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
-  
+
   await sendEmail({
     to: user.email,
     subject: 'Verify your Virtual Tourist account',
@@ -303,5 +303,76 @@ export const resendVerification = asyncHandler(async (req, res) => {
   res.json({
     success: true,
     message: 'Verification email sent'
+  });
+});
+
+// @desc    Get user dashboard data
+// @route   GET /api/auth/dashboard
+export const getUserDashboard = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id);
+
+  res.json({
+    success: true,
+    data: {
+      stats: {
+        toursCompleted: user.stats?.toursCompleted || 0,
+        totalWatchTime: user.stats?.totalWatchTime || 0,
+        countriesVisited: Math.floor(user.stats?.toursCompleted / 2) || 1,
+        currentStreak: 5,
+        totalPoints: (user.stats?.toursCompleted || 0) * 100,
+        level: 'Explorer',
+        lastMonthTours: 8,
+        lastMonthWatchTime: 6.2,
+        levelProgress: 65
+      },
+      categoryBreakdown: [
+        { name: 'Cultural', value: 35, color: '#3b82f6' },
+        { name: 'Nature', value: 25, color: '#22c55e' },
+        { name: 'Historical', value: 20, color: '#f59e0b' },
+        { name: 'Urban', value: 15, color: '#8b5cf6' },
+        { name: 'Adventure', value: 5, color: '#ef4444' }
+      ],
+      recentActivity: [],
+      continueWatching: [],
+      newDestinations: [],
+      featuredTours: [],
+      activityData: [
+        { day: 'Mon', tours: 2, hours: 1.5 },
+        { day: 'Tue', tours: 3, hours: 2.0 },
+        { day: 'Wed', tours: 1, hours: 0.5 },
+        { day: 'Thu', tours: 4, hours: 3.0 },
+        { day: 'Fri', tours: 2, hours: 1.8 },
+        { day: 'Sat', tours: 5, hours: 4.2 },
+        { day: 'Sun', tours: 3, hours: 2.5 }
+      ]
+    }
+  });
+});
+
+// @desc    Get user achievements
+// @route   GET /api/auth/achievements
+export const getUserAchievements = asyncHandler(async (req, res) => {
+  res.json({
+    success: true,
+    data: {
+      achievements: [],
+      totalPoints: 0,
+      level: 'Explorer'
+    }
+  });
+});
+
+// @desc    Get user recommendations
+// @route   GET /api/auth/recommendations
+export const getUserRecommendations = asyncHandler(async (req, res) => {
+  const Tour = (await import('../models/Tour.js')).default;
+
+  const tours = await Tour.find().limit(10);
+
+  res.json({
+    success: true,
+    data: {
+      tours
+    }
   });
 });

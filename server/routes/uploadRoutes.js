@@ -25,6 +25,8 @@ router.use(protect);
 
 router.post('/image', upload.single('image'), uploadImage);
 router.post('/images', upload.array('images', 10), uploadMultipleImages);
+router.post('/panorama', upload.single('panorama'), uploadImage);
 router.delete('/image/:publicId', deleteImage);
+router.delete('/:fileId', deleteImage);
 
 export default router;
