@@ -285,6 +285,7 @@ docker-compose.local.yml
 *.sqlite3
 *.db
 data/
+!client/src/data/
 uploads/
 public/uploads/
 tmp/
